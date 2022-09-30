@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfix_mobile/data/auth/auth_repository.dart';
+import 'package:portfix_mobile/ui/screens/auth/forget_password_screen.dart';
 import 'package:portfix_mobile/ui/screens/home_screen.dart';
 import 'package:portfix_mobile/ui/theme.dart';
 import 'package:portfix_mobile/ui/widgets/text_field.dart';
@@ -70,41 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Transform.rotate(
-                        angle: pi,
-                        child: WaveWidget(
-                          config: CustomConfig(
-                            durations: [4000],
-                            heightPercentages: [0],
-                            gradientBegin: Alignment.centerLeft,
-                            gradientEnd: Alignment.centerRight,
-                            gradients: [
-                              [
-                                CustomTheme.primary.withGreen(130),
-                                CustomTheme.primary
-                              ]
-                            ],
-                          ),
-                          size: Size(
-                            double.infinity,
-                            MediaQuery.of(context).size.height * 0.5,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                        ),
-                        child: Text(
-                          "Login to use the app",
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                      )
-                    ],
-                  ),
+                  wave(context),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
@@ -129,6 +96,39 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget wave(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Transform.rotate(
+          angle: pi,
+          child: WaveWidget(
+            config: CustomConfig(
+              durations: [4000],
+              heightPercentages: [0],
+              gradientBegin: Alignment.centerLeft,
+              gradientEnd: Alignment.centerRight,
+              gradients: [
+                [CustomTheme.primary.withGreen(130), CustomTheme.primary]
+              ],
+            ),
+            size: Size(
+              double.infinity,
+              MediaQuery.of(context).size.height * 0.5,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Text(
+            "Login to use the app",
+            style: Theme.of(context).textTheme.headline3,
+          ),
+        )
+      ],
     );
   }
 
@@ -160,7 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
             alignment: Alignment.centerRight,
             child: TextButton(
               child: const Text("Forgot password?"),
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ForgetPasswordScreen(),
+                ),
+              ),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.all(0),
                 splashFactory: NoSplash.splashFactory,

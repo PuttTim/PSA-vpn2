@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:portfix_mobile/data/auth/auth_repository.dart';
 import 'package:portfix_mobile/firebase_options.dart';
 import 'package:portfix_mobile/ui/screens/home_screen.dart';
-import 'package:portfix_mobile/ui/screens/login_screen.dart';
+import 'package:portfix_mobile/ui/screens/auth/login_screen.dart';
 import 'package:portfix_mobile/ui/theme.dart';
 
 void main() async {
