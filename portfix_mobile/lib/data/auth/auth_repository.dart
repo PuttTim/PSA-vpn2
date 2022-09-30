@@ -23,4 +23,6 @@ class AuthRepository {
   Future<void> sendPasswordResetLink(String email) {
     return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
+
+  Future<void> logOut() => _firebaseAuth.signOut();
 }
