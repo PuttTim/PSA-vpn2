@@ -53,15 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
         });
-        if (e is FirebaseException) {
-          SnackbarUtils(context: context).createSnackbar(
-            (e).message.toString(),
-          );
-        }
         SnackbarUtils(context: context).createSnackbar(
-          e.toString(),
+          (e as FirebaseAuthException).message.toString(),
         );
-        _authRepository.logOut();
       }
     }
   }
@@ -71,66 +65,68 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Transform.rotate(
-                      angle: pi,
-                      child: WaveWidget(
-                        config: CustomConfig(
-                          durations: [1000],
-                          heightPercentages: [0],
-                          gradientBegin: Alignment.centerLeft,
-                          gradientEnd: Alignment.centerRight,
-                          gradients: [
-                            [
-                              CustomTheme.primary.withGreen(130),
-                              CustomTheme.primary
-                            ]
-                          ],
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Transform.rotate(
+                        angle: pi,
+                        child: WaveWidget(
+                          config: CustomConfig(
+                            durations: [4000],
+                            heightPercentages: [0],
+                            gradientBegin: Alignment.centerLeft,
+                            gradientEnd: Alignment.centerRight,
+                            gradients: [
+                              [
+                                CustomTheme.primary.withGreen(130),
+                                CustomTheme.primary
+                              ]
+                            ],
+                          ),
+                          size: Size(
+                            double.infinity,
+                            MediaQuery.of(context).size.height * 0.5,
+                          ),
                         ),
-                        size: Size(
-                          double.infinity,
-                          MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                      ),
-                      child: Text(
-                        "Login to use the app",
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 40,
+                        child: Text(
+                          "Login to use the app",
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      )
+                    ],
                   ),
-                  child: loginForm(),
-                ),
-              ],
-            ),
-            Visibility(
-              visible: _isLoading,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: CustomTheme.primary.shade500,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 40,
+                    ),
+                    child: loginForm(),
+                  ),
+                ],
               ),
-            )
-          ],
+              Visibility(
+                visible: _isLoading,
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: CustomTheme.primary.shade500,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
