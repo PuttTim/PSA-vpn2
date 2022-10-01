@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfix_mobile/data/data.dart';
+import 'package:portfix_mobile/ui/screens/auth/widgets/loading.dart';
 import 'package:portfix_mobile/ui/screens/auth/widgets/wave.dart';
 import 'package:portfix_mobile/ui/screens/screens.dart';
 import 'package:portfix_mobile/ui/theme.dart';
@@ -79,16 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                Visibility(
-                  visible: _isLoading,
-                  child: Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height,
-                    color: CustomTheme.primary.shade500,
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  ),
-                )
+                LoadingWidget(isLoading: _isLoading),
               ],
             ),
           ),

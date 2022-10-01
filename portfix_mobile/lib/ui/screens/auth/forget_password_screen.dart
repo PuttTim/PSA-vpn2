@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfix_mobile/data/data.dart';
+import 'package:portfix_mobile/ui/screens/auth/widgets/loading.dart';
 import 'package:portfix_mobile/ui/screens/auth/widgets/wave.dart';
-import 'package:portfix_mobile/ui/theme.dart';
 import 'package:portfix_mobile/ui/widgets/text_field.dart';
 import 'package:portfix_mobile/ui/utils/snackbar.dart';
 
@@ -59,7 +59,16 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               children: [
                 Column(
                   children: [
-                    const WaveHeader(title: "Forgot password?"),
+                    Stack(
+                      alignment: Alignment.topLeft,
+                      children: [
+                        const WaveHeader(title: "Forgot password?"),
+                        AppBar(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                        ),
+                      ],
+                    ),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
@@ -70,32 +79,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                   ],
                 ),
-                Visibility(
-                  visible: _isLoading,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: CustomTheme.primary.shade500,
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    left: 15,
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.hardEdge,
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                  ),
-                ),
+                LoadingWidget(isLoading: _isLoading),
               ],
             ),
           ),

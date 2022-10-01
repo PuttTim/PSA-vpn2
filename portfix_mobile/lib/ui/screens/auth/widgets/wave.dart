@@ -35,11 +35,14 @@ class WaveHeader extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.headline3,
+        Transform.translate(
+          offset: const Offset(0, -25),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headline3,
+            ),
           ),
         )
       ],
