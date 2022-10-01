@@ -7,5 +7,5 @@ export interface Task {
     status: "Not Started" | "In Progress"
     engineerId?: String
     repeat: number // repeat value is in days
-    lastDone?: Date
+    dueDate?: Date
 }
