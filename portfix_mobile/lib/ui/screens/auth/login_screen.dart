@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 visible: _isLoading,
                 child: Container(
                   width: double.infinity,
-                  height: double.infinity,
+                  height: MediaQuery.of(context).size.height,
                   color: CustomTheme.primary.shade500,
                   alignment: Alignment.center,
                   child: const CircularProgressIndicator(),
