@@ -35,26 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
             stream: _repository.getTaskStreams(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // show loading widget
                 return Shimmer.fromColors(
+                  period: const Duration(seconds: 1),
                   child: Column(
                     children: [
-                      ListTile(
-                        leading: const CircleAvatar(),
-                        title: Container(height: 10),
-                      ),
-                      ListTile(
-                        leading: const CircleAvatar(),
-                        title: Container(height: 10),
-                      ),
-                      ListTile(
-                        leading: const CircleAvatar(),
-                        title: Container(height: 10),
-                      ),
+                      loadingTile(context),
+                      loadingTile(context),
+                      loadingTile(context),
                     ],
                   ),
-                  baseColor: CustomTheme.getbaseColor(context),
-                  highlightColor: CustomTheme.gethighlightColor(context),
+                  baseColor: CustomTheme.getbaseColor(context).withAlpha(90),
+                  highlightColor:
+                      CustomTheme.gethighlightColor(context).withAlpha(120),
                 );
               }
               if (!snapshot.hasData || snapshot.data?.isEmpty == true) {
@@ -62,22 +54,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Container();
               }
 
-              return ListView.separated(
-                itemBuilder: (ctx, i) {
-                  return TaskItem(taskModel: snapshot.data![i]);
-                },
-                separatorBuilder: (ctx, i) {
-                  return Container(
-                    height: 1,
-                    color:
-                        Theme.of(context).colorScheme.onSurface.withAlpha(50),
-                  );
-                },
-                itemCount: snapshot.data!.length,
+              return Expanded(
+                child: ListView.separated(
+                  itemBuilder: (ctx, i) {
+                    return TaskItem(taskModel: snapshot.data![i]);
+                  },
+                  separatorBuilder: (ctx, i) {
+                    return Container(
+                      height: 1,
+                      color:
+                          Theme.of(context).colorScheme.onSurface.withAlpha(50),
+                    );
+                  },
+                  itemCount: snapshot.data!.length,
+                ),
               );
             },
           )
         ],
+      ),
+    );
+  }
+
+  ListTile loadingTile(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: CustomTheme.getbaseColor(context),
+      ),
+      title: Container(
+        height: 20,
+        color: CustomTheme.getbaseColor(context),
+      ),
+      subtitle: Container(
+        height: 15,
+        color: CustomTheme.getbaseColor(context),
       ),
     );
   }

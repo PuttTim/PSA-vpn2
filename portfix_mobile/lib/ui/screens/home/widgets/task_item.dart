@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
 
 class TaskItem extends StatefulWidget {
@@ -23,7 +24,11 @@ class _TaskItemState extends State<TaskItem> {
         backgroundColor: colors[widget.taskModel.priority],
       ),
       title: Text(widget.taskModel.title),
-      subtitle: Text(widget.taskModel.dueDate.toDate().toString()),
+      subtitle: Text(
+        DateFormat('dd MMM y')
+            .format(widget.taskModel.dueDate.toDate())
+            .toString(),
+      ),
     );
   }
 }
