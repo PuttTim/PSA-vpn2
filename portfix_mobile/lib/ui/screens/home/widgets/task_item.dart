@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
+import 'package:portfix_mobile/ui/screens/details/details_screen.dart';
 
 class TaskItem extends StatefulWidget {
   final TaskModel taskModel;
@@ -20,18 +21,6 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
-    // return ListTile(
-    //   leading: CircleAvatar(
-    //     backgroundColor: colors[widget.taskModel.priority],
-    //   ),
-    //   title: Text(widget.taskModel.title),
-    //   subtitle: Text(
-    //     DateFormat('dd MMM y')
-    //         .format(widget.taskModel.dueDate.toDate())
-    //         .toString(),
-    //   ),
-    // );
-
     return ExpandableNotifier(
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -94,8 +83,13 @@ class _TaskItemState extends State<TaskItem> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(elevation: 0),
-                        onPressed: () => {},
-                        child: const Text("I'll be doing it"),
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                DetailsScreen(taskModel: widget.taskModel),
+                          ),
+                        ),
+                        child: const Text("More Details"),
                       ),
                     ),
                   ],

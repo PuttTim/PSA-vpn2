@@ -82,37 +82,35 @@ class _HomeScreenState extends State<HomeScreen> {
               return -1;
             });
 
-            return Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 16),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "In Progress",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "In Progress",
+                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    Column(
-                      children: inProgressList
-                          .map((e) => TaskItem(taskModel: e))
-                          .toList(),
+                  ),
+                  Column(
+                    children: inProgressList
+                        .map((e) => TaskItem(taskModel: e))
+                        .toList(),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Others",
+                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 16),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Others",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                    Column(
-                      children:
-                          others.map((e) => TaskItem(taskModel: e)).toList(),
-                    ),
-                  ],
-                ),
+                  ),
+                  Column(
+                    children:
+                        others.map((e) => TaskItem(taskModel: e)).toList(),
+                  ),
+                ],
               ),
             );
           },
