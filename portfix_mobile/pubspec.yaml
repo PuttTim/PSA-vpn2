@@ -37,6 +37,9 @@ dependencies:
   firebase_auth: ^3.4.1
   cloud_firestore: ^3.2.1
   wave: ^0.2.2
+  google_maps_flutter: ^2.1.8
+  location: ^4.4.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
