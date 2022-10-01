@@ -72,11 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
               return -1;
             });
 
-            var others = snapshot.data!
+            var notStarted = snapshot.data!
                 .where((element) => element.engineerId?.isNotEmpty == false)
                 .toList();
 
-            others.sort((a, b) {
+            notStarted.sort((a, b) {
               if (a.dueDate.millisecondsSinceEpoch >
                   b.dueDate.millisecondsSinceEpoch) return 1;
               return -1;
@@ -98,17 +98,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         .map((e) => TaskItem(taskModel: e))
                         .toList(),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     padding: const EdgeInsets.only(left: 16),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Others",
+                      "Not Started",
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
                   Column(
                     children:
-                        others.map((e) => TaskItem(taskModel: e)).toList(),
+                        notStarted.map((e) => TaskItem(taskModel: e)).toList(),
                   ),
                 ],
               ),
