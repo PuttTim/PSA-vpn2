@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:portfix_mobile/data/tasks/task_dao.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
 
@@ -6,27 +9,59 @@ class TaskDaoImpl implements TaskDao {
   static final TaskDaoImpl _impl = TaskDaoImpl._();
   factory TaskDaoImpl.getInstance() => _impl;
 
-  @override
-  Future<void> deleteTask(String id) {
-    // TODO: implement deleteTask
-    throw UnimplementedError();
-  }
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String collectionPath = "tasks";
 
   @override
   Stream<List<TaskModel>> getTaskStreams() {
-    // TODO: implement getTaskStreams
-    throw UnimplementedError();
+    return _firestore.collection(collectionPath).snapshots().map((event) {
+      return event.docs.map((doc) {
+        return TaskModel.fromDocument(doc);
+      }).toList();
+    });
   }
 
   @override
-  Future<List<TaskModel>> getTasksFuture() {
-    // TODO: implement getTasksFuture
-    throw UnimplementedError();
+  Future<List<TaskModel>> getTasksFuture() async {
+    var tasks = await _firestore.collection(collectionPath).get();
+    return tasks.docs.map((e) {
+      return TaskModel.fromDocument(e);
+    }).toList();
   }
 
   @override
-  Future<void> updateTask(TaskModel task) {
-    // TODO: implement updateTask
-    throw UnimplementedError();
+  Future<bool> createTask(TaskModel task) async {
+    try {
+      await _firestore.collection(collectionPath).doc().set(task.toMap());
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> updateTask(TaskModel task) async {
+    try {
+      await _firestore
+          .collection(collectionPath)
+          .doc(task.id)
+          .set(task.toMap());
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> deleteTask(String id) async {
+    try {
+      await _firestore.collection(collectionPath).doc(id).delete();
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
   }
 }

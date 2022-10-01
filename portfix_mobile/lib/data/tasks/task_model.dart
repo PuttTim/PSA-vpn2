@@ -2,16 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
   String id;
+  String equipmentId;
   String title;
-  String priority;
+  int priority; /* 1, 2, 3 1 -> lowest priority */
   int repeat;
   String description;
   String? assignedId;
-  Status status;
+  String status;
   DateTime lastDone;
 
   TaskModel({
     required this.id,
+    required this.equipmentId,
     required this.title,
     required this.priority,
     required this.repeat,
@@ -24,18 +26,32 @@ class TaskModel {
   TaskModel.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc)
       : this(
           id: doc.id,
+          equipmentId: doc["equipmentId"],
           title: doc["title"],
           priority: doc["priority"],
           repeat: doc["repeat"],
           description: doc["description"],
           lastDone: DateTime.fromMillisecondsSinceEpoch(doc["lastDone"]),
-          status: Status.values[doc["status"]],
+          status: doc["status"],
           assignedId: doc["assignedId"] ?? "",
         );
+
+  Map<String, dynamic> toMap() {
+    return {
+      "title": title,
+      "priority": priority,
+      "repeat": repeat,
+      "description": description,
+      "lastDone": lastDone.millisecondsSinceEpoch,
+      "status": status,
+      "assignedId": assignedId,
+      "equipmentId": equipmentId,
+    };
+  }
 }
 
-enum Status {
-  notStarted,
-  inProgress,
-  completed,
+class Status {
+  static const String notStarted = "Not Started";
+  static const String inProgress = "In Progress";
+  static const String completed = "Completed";
 }
