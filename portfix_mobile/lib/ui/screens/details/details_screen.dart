@@ -79,16 +79,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 Row(
                   children: [
                     CardWidget(
-                      width: (width / 2) - 28,
+                      width: (width / 2) - 19,
                       title: "Due Date",
                       content: DateFormat('dd MMM y')
                           .format(widget.taskModel.dueDate.toDate())
                           .toString(),
+                      padding: const EdgeInsets.only(
+                        top: 1,
+                        bottom: 1,
+                        right: 1,
+                        left: 10,
+                      ),
                     ),
                     CardWidget(
-                      width: (width / 2) - 28,
+                      width: (width / 2) - 19,
                       title: "Status",
                       content: widget.taskModel.status,
+                      padding: const EdgeInsets.only(
+                        top: 1,
+                        bottom: 1,
+                        right: 10,
+                        left: 1,
+                      ),
                     ),
                   ],
                 ),
