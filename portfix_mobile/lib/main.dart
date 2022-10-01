@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme.lightTheme,
       darkTheme: CustomTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
+      // home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }
