@@ -1,11 +1,11 @@
 export interface Task {
-    id: String
-    equipmentId: String
-    title: String
-    description: String
+    id: string
+    equipmentId: string
+    title: string
+    description: string
     priority: 1 | 2 | 3
     status: "Not Started" | "In Progress"
-    engineerId?: String
+    engineerId?: string
     repeat: number // repeat value is in days
     dueDate?: Date
 }
