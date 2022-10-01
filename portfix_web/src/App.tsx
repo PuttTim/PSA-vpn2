@@ -1,17 +1,17 @@
-import { useState } from "react"
-import reactLogo from "./assets/react.svg"
-import { Button, Center, Text } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import { Route, Routes } from "react-router-dom"
+import Equipment from "./Pages/Equipment"
+import Home from "./Pages/Home"
 
-function App() {
-    const [count, setCount] = useState(0)
-
+const App = () => {
     return (
-        <div>
-            <Center>
-                <Button colorScheme="teal">Hello</Button>
-                <Text>Hello</Text>
-            </Center>
-        </div>
+        <>
+            
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/equipment" element={<Equipment />} />
+            </Routes>
+        </>
     )
 }
 
