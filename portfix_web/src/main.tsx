@@ -5,9 +5,10 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 
 import "./index.css"
+import theme from "./Theme"
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
         <BrowserRouter>
             <App />
         </BrowserRouter>
