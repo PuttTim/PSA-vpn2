@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:portfix_mobile/data/engineer/engineer_repository.dart';
 import 'package:portfix_mobile/data/equipment/equipment_model.dart';
 import 'package:portfix_mobile/data/equipment/equipment_repository.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
@@ -17,8 +18,10 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   String darkMode = "";
-  final EquipmentRepository _repo = EquipmentRepository.getInstance();
+  final EquipmentRepository _equipmentRepo = EquipmentRepository.getInstance();
+  final EngineerRepository _engineerRepo = EngineerRepository.getInstance();
   GoogleMapController? _controller;
+  String? name;
 
   Map<int, String> priorityMap = {
     1: "Low",
@@ -33,6 +36,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
       darkMode = await rootBundle.loadString(
         'assets/map_styles/dark_mode.json',
       );
+      if (widget.taskModel.status == Status.inProgress) {
+        var engineer = await _engineerRepo.getEngineerById(
+          widget.taskModel.engineerId!,
+        );
+        setState(() {
+          name = engineer.name;
+        });
+      }
     })();
   }
 
@@ -47,18 +58,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
         backgroundColor: CustomTheme.primary,
       ),
       body: FutureBuilder<EquipmentModel>(
-        future: _repo.getEquipmentById(
+        future: _equipmentRepo.getEquipmentById(
           widget.taskModel.equipmentId,
         ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, equipmentSnapshot) {
+          if (equipmentSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
           var location = LatLng(
-            snapshot.data!.geoPoint.latitude,
-            snapshot.data!.geoPoint.longitude,
+            equipmentSnapshot.data!.geoPoint.latitude,
+            equipmentSnapshot.data!.geoPoint.longitude,
           );
           return SingleChildScrollView(
             child: Column(
@@ -66,7 +77,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 googleMap(
                   width,
                   location,
-                  snapshot,
+                  equipmentSnapshot,
                   context,
                 ),
                 const SizedBox(height: 5),
@@ -93,6 +104,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       (width / 2) - 28,
                     ),
                   ],
+                ),
+                Visibility(
+                  visible: name != null,
+                  child: card(
+                    context,
+                    "Assigned To",
+                    name ?? "",
+                    double.infinity,
+                    true,
+                  ),
                 ),
                 card(
                   context,
