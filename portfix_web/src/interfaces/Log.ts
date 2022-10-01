@@ -1,9 +1,9 @@
-import { LogTypeEnum } from "./LogTypeEnum"
-
 export interface Log {
-    assignedTo: String
-    equpimentId: String
+    id: String
+    title: String
+    engineerId: String
+    equipmentId: String
     timestamp: Date
     comment: String
-    type: LogTypeEnum
+    type: "Cancelled" | "Completed"
 }
