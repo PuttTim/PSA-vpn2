@@ -9,7 +9,7 @@ class TaskModel {
   String description;
   String? engineerId;
   String status;
-  DateTime lastDone;
+  Timestamp dueDate;
 
   TaskModel({
     required this.id,
@@ -19,7 +19,7 @@ class TaskModel {
     required this.repeat,
     required this.description,
     required this.status,
-    required this.lastDone,
+    required this.dueDate,
     this.engineerId,
   });
 
@@ -31,7 +31,7 @@ class TaskModel {
           priority: doc["priority"],
           repeat: doc["repeat"],
           description: doc["description"],
-          lastDone: DateTime.parse(doc["lastDone"]),
+          dueDate: doc["dueDate"],
           status: doc["status"],
           engineerId: doc["engineerId"] ?? "",
         );
@@ -42,7 +42,7 @@ class TaskModel {
       "priority": priority,
       "repeat": repeat,
       "description": description,
-      "lastDone": lastDone.toString(),
+      "dueDate": dueDate,
       "status": status,
       "engineerId": engineerId,
       "equipmentId": equipmentId,
