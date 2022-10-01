@@ -50,6 +50,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var alreadyAssigned = widget.taskModel.engineerId != null &&
+        widget.taskModel.status == Status.inProgress;
 
     return Scaffold(
       appBar: AppBar(
@@ -71,6 +73,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             equipmentSnapshot.data!.geoPoint.latitude,
             equipmentSnapshot.data!.geoPoint.longitude,
           );
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -122,15 +125,49 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   double.infinity,
                   true,
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(elevation: 0),
-                    onPressed: () {},
-                    child: const Text("I will be doing this!"),
+                Visibility(
+                  visible: !alreadyAssigned,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(elevation: 0),
+                      onPressed: () {},
+                      child: const Text("I will be doing this!"),
+                    ),
                   ),
                 ),
+                Visibility(
+                  visible: alreadyAssigned,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.red,
+                            ),
+                            onPressed: () {},
+                            child: const Text("Cancel"),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(elevation: 0),
+                            onPressed: () {},
+                            child: const Text("Done"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           );
