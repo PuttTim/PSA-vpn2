@@ -7,7 +7,7 @@ class TaskModel {
   int priority; /* 1, 2, 3 1 -> lowest priority */
   int repeat;
   String description;
-  String? assignedId;
+  String? engineerId;
   String status;
   DateTime lastDone;
 
@@ -20,7 +20,7 @@ class TaskModel {
     required this.description,
     required this.status,
     required this.lastDone,
-    this.assignedId,
+    this.engineerId,
   });
 
   TaskModel.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc)
@@ -31,9 +31,9 @@ class TaskModel {
           priority: doc["priority"],
           repeat: doc["repeat"],
           description: doc["description"],
-          lastDone: DateTime.fromMillisecondsSinceEpoch(doc["lastDone"]),
+          lastDone: DateTime.parse(doc["lastDone"]),
           status: doc["status"],
-          assignedId: doc["assignedId"] ?? "",
+          engineerId: doc["engineerId"] ?? "",
         );
 
   Map<String, dynamic> toMap() {
@@ -42,9 +42,9 @@ class TaskModel {
       "priority": priority,
       "repeat": repeat,
       "description": description,
-      "lastDone": lastDone.millisecondsSinceEpoch,
+      "lastDone": lastDone.toString(),
       "status": status,
-      "assignedId": assignedId,
+      "engineerId": engineerId,
       "equipmentId": equipmentId,
     };
   }

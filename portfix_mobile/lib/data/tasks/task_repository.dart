@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:portfix_mobile/data/tasks/task_dao.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
 
-class TaskDaoImpl implements TaskDao {
-  TaskDaoImpl._();
-  static final TaskDaoImpl _impl = TaskDaoImpl._();
-  factory TaskDaoImpl.getInstance() => _impl;
+class TaskRepository implements TaskDao {
+  TaskRepository._();
+  static final TaskRepository _impl = TaskRepository._();
+  factory TaskRepository.getInstance() => _impl;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String collectionPath = "tasks";
