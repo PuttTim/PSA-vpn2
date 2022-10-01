@@ -1,6 +1,6 @@
 import { useState } from "react"
 import reactLogo from "./assets/react.svg"
-import { Button, Center } from "@chakra-ui/react"
+import { Button, Center, Text } from "@chakra-ui/react"
 
 function App() {
     const [count, setCount] = useState(0)
@@ -9,6 +9,7 @@ function App() {
         <div>
             <Center>
                 <Button colorScheme="teal">Hello</Button>
+                <Text>Hello</Text>
             </Center>
         </div>
     )
