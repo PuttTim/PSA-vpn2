@@ -1,15 +1,11 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:portfix_mobile/data/auth/auth_repository.dart';
-import 'package:portfix_mobile/ui/screens/auth/forget_password_screen.dart';
-import 'package:portfix_mobile/ui/screens/home/home_screen.dart';
+import 'package:portfix_mobile/data/data.dart';
+import 'package:portfix_mobile/ui/screens/auth/widgets/wave.dart';
+import 'package:portfix_mobile/ui/screens/screens.dart';
 import 'package:portfix_mobile/ui/theme.dart';
 import 'package:portfix_mobile/ui/widgets/text_field.dart';
 import 'package:portfix_mobile/ui/utils/snackbar.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -72,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Column(
                   children: [
-                    wave(context),
+                    const WaveHeader(title: "Login to use the app"),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
@@ -98,39 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget wave(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Transform.rotate(
-          angle: pi,
-          child: WaveWidget(
-            config: CustomConfig(
-              durations: [4000],
-              heightPercentages: [0],
-              gradientBegin: Alignment.centerLeft,
-              gradientEnd: Alignment.centerRight,
-              gradients: [
-                [CustomTheme.primary.withGreen(130), CustomTheme.primary]
-              ],
-            ),
-            size: Size(
-              double.infinity,
-              MediaQuery.of(context).size.height * 0.5,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            "Login to use the app",
-            style: Theme.of(context).textTheme.headline3,
-          ),
-        )
-      ],
     );
   }
 

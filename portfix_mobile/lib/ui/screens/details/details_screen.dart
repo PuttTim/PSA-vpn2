@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:portfix_mobile/data/engineer/engineer_repository.dart';
+import 'package:portfix_mobile/data/data.dart';
 import 'package:portfix_mobile/data/equipment/equipment_model.dart';
-import 'package:portfix_mobile/data/equipment/equipment_repository.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
+import 'package:portfix_mobile/ui/screens/details/widgets/card.dart';
+import 'package:portfix_mobile/ui/screens/details/widgets/google_map.dart';
 import 'package:portfix_mobile/ui/theme.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -17,10 +16,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  String darkMode = "";
   final EquipmentRepository _equipmentRepo = EquipmentRepository.getInstance();
   final EngineerRepository _engineerRepo = EngineerRepository.getInstance();
-  GoogleMapController? _controller;
   String? name;
 
   Map<int, String> priorityMap = {
@@ -33,9 +30,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     (() async {
-      darkMode = await rootBundle.loadString(
-        'assets/map_styles/dark_mode.json',
-      );
       if (widget.taskModel.status == Status.inProgress) {
         var engineer = await _engineerRepo.getEngineerById(
           widget.taskModel.engineerId!,
@@ -69,61 +63,49 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          var location = LatLng(
-            equipmentSnapshot.data!.geoPoint.latitude,
-            equipmentSnapshot.data!.geoPoint.longitude,
-          );
 
           return SingleChildScrollView(
             child: Column(
               children: [
-                googleMap(
-                  width,
-                  location,
-                  equipmentSnapshot,
-                  context,
+                MapWidget(
+                  equipmentModel: equipmentSnapshot.data!,
                 ),
                 const SizedBox(height: 5),
-                card(
-                  context,
-                  "Priority",
-                  priorityMap[widget.taskModel.priority]!,
-                  double.infinity,
+                CardWidget(
+                  width: double.infinity,
+                  title: "Priority",
+                  content: priorityMap[widget.taskModel.priority]!,
                 ),
                 Row(
                   children: [
-                    card(
-                      context,
-                      "Due Date",
-                      DateFormat('dd MMM y')
+                    CardWidget(
+                      width: (width / 2) - 28,
+                      title: "Due Date",
+                      content: DateFormat('dd MMM y')
                           .format(widget.taskModel.dueDate.toDate())
                           .toString(),
-                      (width / 2) - 28,
                     ),
-                    card(
-                      context,
-                      "Status",
-                      widget.taskModel.status,
-                      (width / 2) - 28,
+                    CardWidget(
+                      width: (width / 2) - 28,
+                      title: "Status",
+                      content: widget.taskModel.status,
                     ),
                   ],
                 ),
                 Visibility(
                   visible: name != null,
-                  child: card(
-                    context,
-                    "Assigned To",
-                    name ?? "",
-                    double.infinity,
-                    true,
+                  child: CardWidget(
+                    width: double.infinity,
+                    title: "Assigned to",
+                    content: name ?? "",
+                    crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                 ),
-                card(
-                  context,
-                  "Description",
-                  widget.taskModel.description,
-                  double.infinity,
-                  true,
+                CardWidget(
+                  width: double.infinity,
+                  title: "Description",
+                  content: widget.taskModel.description,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 ),
                 Visibility(
                   visible: !alreadyAssigned,
@@ -170,74 +152,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 )
               ],
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Padding card(
-    BuildContext context,
-    String title,
-    String content,
-    double width, [
-    bool isDescription = false,
-  ]) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 1,
-      ),
-      child: Card(
-        color: Theme.of(context).colorScheme.primary.withAlpha(70),
-        child: Container(
-          width: width,
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: isDescription
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(content),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget googleMap(
-    double width,
-    LatLng location,
-    AsyncSnapshot<EquipmentModel> snapshot,
-    BuildContext context,
-  ) {
-    return SizedBox(
-      width: width,
-      height: width,
-      child: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: location,
-          zoom: 16,
-        ),
-        markers: {
-          Marker(
-            markerId: MarkerId(snapshot.data!.id),
-            position: location,
-          ),
-        },
-        onMapCreated: (googleMapController) {
-          _controller = googleMapController;
-          _controller?.setMapStyle(
-            Theme.of(context).brightness == Brightness.dark ? darkMode : null,
           );
         },
       ),

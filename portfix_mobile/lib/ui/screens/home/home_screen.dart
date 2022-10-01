@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:portfix_mobile/data/auth/auth_repository.dart';
+import 'package:portfix_mobile/data/data.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
-import 'package:portfix_mobile/data/tasks/task_repository.dart';
-import 'package:portfix_mobile/ui/screens/auth/login_screen.dart';
+import 'package:portfix_mobile/ui/screens/screens.dart';
 import 'package:portfix_mobile/ui/screens/home/widgets/task_item.dart';
 import 'package:shimmer/shimmer.dart';
 
