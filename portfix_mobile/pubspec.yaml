@@ -40,8 +40,10 @@ dependencies:
   google_maps_flutter: ^2.1.8
   location: ^4.4.0
   shimmer: ^2.0.0
+  intl: ^0.17.0
   google_fonts: ^3.0.1
   expandable: ^5.0.1
+
 
 dev_dependencies:
   flutter_test:
