@@ -63,36 +63,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  wave(context),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 40,
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    wave(context),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 40,
+                      ),
+                      child: loginForm(),
                     ),
-                    child: loginForm(),
-                  ),
-                ],
-              ),
-              Visibility(
-                visible: _isLoading,
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height,
-                  color: CustomTheme.primary.shade500,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
+                  ],
                 ),
-              )
-            ],
+                Visibility(
+                  visible: _isLoading,
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height,
+                    color: CustomTheme.primary.shade500,
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

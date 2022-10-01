@@ -21,6 +21,9 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
+    var isOverDue = widget.taskModel.dueDate.millisecondsSinceEpoch <
+        DateTime.now().millisecondsSinceEpoch;
+
     return ExpandableNotifier(
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -48,7 +51,9 @@ class _TaskItemState extends State<TaskItem> {
                 header: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    widget.taskModel.title,
+                    isOverDue
+                        ? "${widget.taskModel.title}(OVERDUE)"
+                        : widget.taskModel.title,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ),

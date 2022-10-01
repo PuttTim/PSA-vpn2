@@ -53,52 +53,54 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  wave(context),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 40,
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    wave(context),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 40,
+                      ),
+                      child: forgetPasswordForm(),
                     ),
-                    child: forgetPasswordForm(),
-                  ),
-                ],
-              ),
-              Visibility(
-                visible: _isLoading,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: CustomTheme.primary.shade500,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 30,
-                  left: 10,
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.hardEdge,
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back),
+                Visibility(
+                  visible: _isLoading,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: CustomTheme.primary.shade500,
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    left: 15,
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: const CircleBorder(),
+                    clipBehavior: Clip.hardEdge,
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
