@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 class CustomTheme {
   static MaterialColor primary = const MaterialColor(0xFF4b9795, {
     50: Color.fromRGBO(75, 151, 149, .1),
-    100: Color.fromRGBO(75, 151, 149, .1),
-    200: Color.fromRGBO(75, 151, 149, .1),
-    300: Color.fromRGBO(75, 151, 149, .1),
-    400: Color.fromRGBO(75, 151, 149, .1),
-    500: Color.fromRGBO(75, 151, 149, .1),
-    600: Color.fromRGBO(75, 151, 149, .1),
-    700: Color.fromRGBO(75, 151, 149, .1),
-    800: Color.fromRGBO(75, 151, 149, .1),
-    900: Color.fromRGBO(75, 151, 149, .1),
+    100: Color.fromRGBO(75, 151, 149, .2),
+    200: Color.fromRGBO(75, 151, 149, .3),
+    300: Color.fromRGBO(75, 151, 149, .4),
+    400: Color.fromRGBO(75, 151, 149, .5),
+    500: Color.fromRGBO(75, 151, 149, .6),
+    600: Color.fromRGBO(75, 151, 149, .7),
+    700: Color.fromRGBO(75, 151, 149, .8),
+    800: Color.fromRGBO(75, 151, 149, .9),
+    900: Color.fromRGBO(75, 151, 149, 1),
   });
 
   static ThemeData lightTheme = ThemeData(
