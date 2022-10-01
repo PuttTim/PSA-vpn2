@@ -10,11 +10,15 @@ class TaskRepository implements TaskDao {
   factory TaskRepository.getInstance() => _impl;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String collectionPath = "tasks";
+  String collectionPath = "task";
 
   @override
   Stream<List<TaskModel>> getTaskStreams() {
-    return _firestore.collection(collectionPath).snapshots().map((event) {
+    return _firestore
+        .collection(collectionPath)
+        .orderBy("priority", descending: true)
+        .snapshots()
+        .map((event) {
       return event.docs.map((doc) {
         return TaskModel.fromDocument(doc);
       }).toList();

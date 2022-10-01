@@ -45,4 +45,16 @@ class CustomTheme {
       onBackground: Colors.white,
     ),
   );
+
+  static Color getbaseColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey[800]!
+        : Colors.grey[300]!;
+  }
+
+  static Color gethighlightColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey[600]!
+        : Colors.grey[100]!;
+  }
 }
