@@ -37,7 +37,6 @@ class _TaskItemState extends State<TaskItem> {
             ),
           ),
           child: Card(
-            // color: colors[widget.taskModel.priority],
             elevation: 5,
             shape: RoundedRectangleBorder(
               side: BorderSide(color: Colors.grey.withOpacity(0.2), width: 1),

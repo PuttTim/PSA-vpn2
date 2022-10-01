@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TaskRepository _repository = TaskRepository.getInstance();
+  final AuthRepository _authRepository = AuthRepository.getInstance();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
               // show empty screen
               return Container();
             }
-            var inProgressList = snapshot.data!
+            var unAssignedToUserList = snapshot.data!.where(
+              (element) => !(element.status == Status.inProgress &&
+                  element.engineerId == _authRepository.getCurrentUser()!.uid),
+            );
+
+            var inProgressList = unAssignedToUserList
                 .where((element) => element.engineerId?.isNotEmpty == true)
                 .toList();
             inProgressList.sort((a, b) {
@@ -72,10 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
               return -1;
             });
 
-            var notStarted = snapshot.data!
+            var notStarted = unAssignedToUserList
                 .where((element) => element.engineerId?.isNotEmpty == false)
                 .toList();
-
             notStarted.sort((a, b) {
               if (a.dueDate.millisecondsSinceEpoch >
                   b.dueDate.millisecondsSinceEpoch) return 1;
