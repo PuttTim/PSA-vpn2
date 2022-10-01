@@ -8,6 +8,19 @@ const theme = extendTheme({
             },
         },
     },
+    components: {
+        Table: {
+            parts: ["th", "td"],
+            baseStyle: {
+                th: {
+                    borderColor: "black",
+                },
+                td: {
+                    borderColor: "black",
+                },
+            },
+        },
+    },
 })
 
 export default theme;

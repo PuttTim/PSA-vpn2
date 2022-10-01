@@ -10,7 +10,7 @@ const App = () => {
     return (
         <>
             <Navbar />
-            <Box maxWidth="1500" margin="auto" mb="8px">
+            <Box maxWidth="1500" margin="auto">
                 <Routes>
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/dashboard" element={<Dashboard />} />
