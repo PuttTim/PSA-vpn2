@@ -15,10 +15,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Color.fromARGB(0, 75, 151, 149)),
-        title: const Text("PortFix"),
-      ),
+          iconTheme: IconThemeData(color: Color.fromARGB(0, 75, 151, 149)),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(width: 45),
+              Text("PortFix"),
+              IconButton(
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () {
+                AuthRepository.getInstance().logOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const LoginScreen(),
+                  ),
+                );
+              },
+              )
+            ],
+          )
+          // iconTheme: IconThemeData(color: Color.fromARGB(0, 75, 151, 149)),
+          // title: const Text("PortFix"),
+          ),
       body: Column(
         children: [
           Row(
@@ -70,19 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                AuthRepository.getInstance().logOut();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
-                  ),
-                );
-              },
-              child: const Text("Log Out"),
-            ),
-          ),
+          // Center(
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       AuthRepository.getInstance().logOut();
+          //       Navigator.of(context).pushReplacement(
+          //         MaterialPageRoute(
+          //           builder: (_) => const LoginScreen(),
+          //         ),
+          //       );
+          //     },
+          //     child: const Text("Log Out"),
+          //   ),
+          // ),
         ],
       ),
     );
