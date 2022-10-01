@@ -20,7 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(width: 45),
-              Text("PortFix"),
+              Text(
+                "PortFix",
+                style: TextStyle(color: Colors.white),
+              ),
               IconButton(
                 icon: Icon(
                   Icons.logout,
@@ -28,13 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 30,
                 ),
                 onPressed: () {
-                AuthRepository.getInstance().logOut();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
-                  ),
-                );
-              },
+                  AuthRepository.getInstance().logOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const LoginScreen(),
+                    ),
+                  );
+                },
               )
             ],
           )
@@ -74,12 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("name : ",
+                          Text("name : Victor",
                               style: TextStyle(
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold,
                               )),
-                          Text("Date : ",
+                          Text("Date : 1/10",
                               style: TextStyle(
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold,
