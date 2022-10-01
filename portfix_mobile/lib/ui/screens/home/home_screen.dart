@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:portfix_mobile/data/auth/auth_repository.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
 import 'package:portfix_mobile/data/tasks/task_repository.dart';
+import 'package:portfix_mobile/ui/screens/auth/login_screen.dart';
 import 'package:portfix_mobile/ui/screens/home/widgets/task_item.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -23,6 +25,19 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("Home"),
         elevation: 0,
         backgroundColor: CustomTheme.primary,
+        actions: [
+          IconButton(
+            onPressed: () {
+              AuthRepository.getInstance().logOut();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const LoginScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 20),
