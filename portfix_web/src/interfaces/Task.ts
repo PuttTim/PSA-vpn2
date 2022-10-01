@@ -9,5 +9,5 @@ export interface Task {
     status: StatusEnum
     assigned: String
     repeat: number
-    last_done: Date
+    lastDone: Date
 }

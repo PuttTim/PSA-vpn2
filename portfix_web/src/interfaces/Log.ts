@@ -1,8 +1,8 @@
 import { LogTypeEnum } from "./LogTypeEnum"
 
 export interface Log {
-    assigned_to: String
-    equpiment_id: String
+    assignedTo: String
+    equpimentId: String
     timestamp: Date
     comment: String
     type: LogTypeEnum
