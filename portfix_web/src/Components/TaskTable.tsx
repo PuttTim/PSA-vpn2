@@ -21,12 +21,31 @@ import {
     ModalFooter,
     Box,
     Center,
+    FormControl,
+    FormHelperText,
+    FormLabel,
+    Input,
+    Button,
+    RadioGroup,
+    Radio,
+    InputGroup,
+    InputRightAddon,
+    InputLeftAddon,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+    Select,
+    Textarea,
 } from "@chakra-ui/react"
-import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { getFirestore, collection, onSnapshot } from "firebase/firestore"
 import { DateTime } from "luxon"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import firebaseInstance from "../firebase"
+import { Engineer } from "../Interfaces/Engineer"
+import { Equipment } from "../Interfaces/Equipment"
 import { Task } from "../Interfaces/Task"
 import StatusLight from "./StatusLight"
 
@@ -41,7 +60,69 @@ const TaskTable = (props: TaskTableProps) => {
     const db = getFirestore(firebaseInstance)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [engineerNameList, setEngineerNameList] = React.useState<string[]>([])
+    const [engineerList, setEngineerList] = useState<Engineer[]>([])
+    const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
+
+    const [taskForm, setTaskForm] = useState({
+        title: "",
+        status: "Not Started",
+        dueDate: DateTime.now(),
+        priority: 1,
+        repeat: 0,
+        equipmentId: "",
+        engineerId: undefined as string | undefined,
+        description: "",
+    })
+
+    useEffect(() => {
+        const unsubscribeEngineer = onSnapshot(
+            collection(db, "engineer"),
+            querySnapshot => {
+                const tempEngineerList: Engineer[] = []
+                querySnapshot.forEach(doc => {
+                    tempEngineerList.push({
+                        ...(doc.data() as Engineer),
+                        id: doc.id,
+                    })
+                })
+
+                setEngineerList(tempEngineerList)
+            },
+        )
+
+        const unsubscribeEquipment = onSnapshot(
+            collection(db, "equipment"),
+            querySnapshot => {
+                const tempEquipmentList: Equipment[] = []
+                querySnapshot.forEach(doc => {
+                    tempEquipmentList.push({
+                        id: doc.id,
+                        model: doc.data().model,
+                        location: doc.data().location,
+                        geopoint: doc.data().geopoint,
+                    })
+                })
+                setEquipmentList(tempEquipmentList)
+            },
+        )
+
+        return () => {
+            unsubscribeEngineer()
+            unsubscribeEquipment()
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log(taskForm)
+    }, [taskForm])
+
+    const addTask = () => {
+        console.log("bruh")
+
+        console.log(taskForm, "finall")
+
+        onClose()
+    }
 
     return (
         <>
@@ -140,8 +221,147 @@ const TaskTable = (props: TaskTableProps) => {
                 <ModalContent>
                     <ModalHeader>Add New Task</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>TODO</ModalBody> {/*TODO Add form*/}
-                    <ModalFooter />
+                    <ModalBody>
+                        <FormControl isRequired>
+                            <FormLabel>Title</FormLabel>
+                            <Input
+                                type="text"
+                                onChange={e =>
+                                    setTaskForm({
+                                        ...taskForm,
+                                        title: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormHelperText>
+                                Eg. Routine Maintenance
+                            </FormHelperText>
+                            <br />
+
+                            <FormLabel>Due Date</FormLabel>
+                            <Input
+                                type="datetime-local"
+                                min={DateTime.now().toISO()}
+                                onChange={e =>
+                                    setTaskForm({
+                                        ...taskForm,
+                                        dueDate: DateTime.fromISO(
+                                            e.target.value,
+                                        ),
+                                    })
+                                }
+                            />
+                            <FormHelperText />
+                            <br />
+
+                            <FormLabel>Priority</FormLabel>
+                            <RadioGroup
+                                onChange={e => {
+                                    setTaskForm({
+                                        ...taskForm,
+                                        priority: parseInt(e),
+                                    })
+                                }}
+                                value={taskForm.priority}>
+                                <HStack>
+                                    <Radio value={3}>High</Radio>
+                                    <Radio value={2}>Medium</Radio>
+                                    <Radio value={1}>Low</Radio>
+                                </HStack>
+                            </RadioGroup>
+                            <FormHelperText />
+                            <br />
+
+                            <FormLabel>Repeated Task</FormLabel>
+                            <InputGroup>
+                                <InputLeftAddon children="Repeat every" />
+                                <NumberInput
+                                    min={0}
+                                    onChange={valueString =>
+                                        setTaskForm({
+                                            ...taskForm,
+                                            repeat: parseInt(valueString),
+                                        })
+                                    }
+                                    value={taskForm.repeat}>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                                <InputRightAddon children="Days" />
+                            </InputGroup>
+                            <FormHelperText>
+                                Eg. Repeat this task every 7 days
+                            </FormHelperText>
+                            <br />
+
+                            <FormLabel>Equipment</FormLabel>
+                            <Select
+                                placeholder="Select Equipment"
+                                onChange={e =>
+                                    setTaskForm({
+                                        ...taskForm,
+                                        equipmentId: e.target.value,
+                                    })
+                                }>
+                                {equipmentList.map((equipment, index) => (
+                                    <option key={index} value={equipment.id}>
+                                        {equipment.id}
+                                    </option>
+                                ))}
+                            </Select>
+                            <FormHelperText>Eg. CR4</FormHelperText>
+                            <br />
+
+                            <FormLabel requiredIndicator="">Engineer</FormLabel>
+                            <Select
+                                placeholder="Select Engineer"
+                                onChange={e =>
+                                    setTaskForm({
+                                        ...taskForm,
+                                        engineerId: e.target.value,
+                                    })
+                                }>
+                                {engineerList.map((engineer, index) => (
+                                    <option key={index} value={engineer.id}>
+                                        {engineer.name}
+                                    </option>
+                                ))}
+                            </Select>
+                            <FormHelperText>Eg. Victor</FormHelperText>
+                            <br />
+
+                            <FormLabel>Description</FormLabel>
+                            <Textarea
+                                onChange={e =>
+                                    setTaskForm({
+                                        ...taskForm,
+                                        description: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormHelperText>
+                                Eg. Check the around the equipment for anything
+                                wrong
+                            </FormHelperText>
+                            <br />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            disabled={
+                                taskForm.title === "" ||
+                                taskForm.dueDate === undefined ||
+                                taskForm.equipmentId === "" ||
+                                taskForm.description === ""
+                            }
+                            onClick={addTask}
+                            colorScheme="teal">
+                            Add Task
+                        </Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
