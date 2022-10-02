@@ -27,7 +27,7 @@ import {
     useDisclosure,
     VStack,
 } from "@chakra-ui/react"
-import { GeoPoint, getFirestore } from "firebase/firestore"
+import { doc, GeoPoint, getFirestore, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import firebaseInstance from "../firebase"
@@ -57,8 +57,12 @@ const EquipmentTable = (props: EquipmentTableProps) => {
     })
 
     const addEquipment = () => {
-        console.log("bruh")
-        console.log(equipmentForm)
+        setDoc(doc(db, "equipment", equipmentForm.id), {
+            model: equipmentForm.model,
+            location: equipmentForm.location,
+            geopoint: new GeoPoint(equipmentForm.lat, equipmentForm.lon),
+        })
+        onClose()
     }
 
     return (
