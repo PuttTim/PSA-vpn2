@@ -33,6 +33,9 @@ const EquipmentPage = () => {
 
     const [equipmentId, setEquipmentId] = useState("0")
     const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
+    const [maintenanceEquipment, setMaintenanceEquipment] = useState<string[]>(
+        [],
+    )
     const [taskList, setTaskList] = useState<Task[]>([])
     const [fullTaskList, setFullTaskList] = useState<Task[]>([])
 
@@ -83,11 +86,12 @@ const EquipmentPage = () => {
                             ),
                         })
                         tempTaskList.sort((a, b) => {
-                            return a.dueDate.diff(b.dueDate).as("days")
-                        })
-                        tempTaskList.sort((a, b) => {
                             return b.priority - a.priority
                         })
+                        tempTaskList.sort((a, b) => {
+                            return a.dueDate.diff(b.dueDate).as("minutes")
+                        })
+
                         setTaskList(tempTaskList)
                         setFullTaskList(tempTaskList)
                     })
@@ -100,6 +104,10 @@ const EquipmentPage = () => {
             unsubscribeTask()
         }
     }, [])
+
+    useEffect(() => {
+        setMaintenanceEquipment(getMaintenanceEquipment(taskList))
+    }, [equipmentList, fullTaskList])
 
     useEffect(() => {
         if (equipmentId !== "0") {
@@ -131,7 +139,7 @@ const EquipmentPage = () => {
 
     const getNumberOfOverdueTasks = (taskList: Task[]) => {
         return taskList.filter(task => {
-            return task.dueDate.diffNow().as("days") < 0
+            return task.dueDate.diffNow().as("days") <= 0
         }).length
     }
 
@@ -139,6 +147,24 @@ const EquipmentPage = () => {
         return taskList.filter(task => {
             return task.status === "In Progress"
         }).length
+    }
+
+    const getInProgressTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.status === "In Progress"
+        })
+    }
+
+    const getMaintenanceEquipment = (taskList: Task[]) => {
+        const maintenanceEquipment: string[] = []
+        const inProgressTasks = getInProgressTasks(taskList)
+        inProgressTasks.filter(task => {
+            if (!maintenanceEquipment.includes(task.equipmentId)) {
+                maintenanceEquipment.push(task.equipmentId)
+            }
+        })
+
+        return maintenanceEquipment
     }
 
     return (
@@ -162,6 +188,7 @@ const EquipmentPage = () => {
                         ]}
                         equipment={equipmentList}
                         selectedEquipmentId={equipmentId}
+                        maintenanceEquipment={maintenanceEquipment}
                         onSelect={selectEquipment}
                         onAdd={addEquipment}
                     />

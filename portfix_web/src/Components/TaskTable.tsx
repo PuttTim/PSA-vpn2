@@ -20,6 +20,7 @@ import {
     ModalBody,
     ModalFooter,
     Box,
+    Center,
 } from "@chakra-ui/react"
 import { doc, getDoc, getFirestore } from "firebase/firestore"
 import { DateTime } from "luxon"
@@ -27,6 +28,7 @@ import React, { useEffect } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import firebaseInstance from "../firebase"
 import { Task } from "../Interfaces/Task"
+import StatusLight from "./StatusLight"
 
 type TaskTableProps = {
     heading: string[]
@@ -79,29 +81,54 @@ const TaskTable = (props: TaskTableProps) => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {props.tasks.map((task, index) => (
-                                    <Tr
-                                        key={index}
-                                        // onClick={() => props.onSelect(task.id)}
-                                    >
-                                        <Td>{task.priority}</Td>
-                                        <Td>{task.status}</Td>
-                                        <Td>{task.title}</Td>
-                                        <Td
-                                            maxW="15ch"
-                                            overflowX="hidden"
-                                            textOverflow="ellipsis">
-                                            {task.engineerId}
-                                        </Td>
-                                        <Td>
-                                            {task.dueDate
-                                                ? task.dueDate.toFormat(
-                                                      "dd/MM/yyyy",
-                                                  )
-                                                : "-/-/-"}
+                                {props.tasks.length > 0 ? (
+                                    props.tasks.map((task, index) => (
+                                        <Tr
+                                            key={index}
+                                            // onClick={() => props.onSelect(task.id)}
+                                        >
+                                            <Td>
+                                                <Center>
+                                                    <StatusLight
+                                                        color={
+                                                            task.dueDate <
+                                                            DateTime.now()
+                                                                ? "redPulse"
+                                                                : task.priority ===
+                                                                  3
+                                                                ? "red"
+                                                                : task.priority ===
+                                                                  2
+                                                                ? "yellow"
+                                                                : "green"
+                                                        }
+                                                    />
+                                                </Center>
+                                            </Td>
+                                            <Td>{task.status}</Td>
+                                            <Td>{task.title}</Td>
+                                            <Td
+                                                maxW="15ch"
+                                                overflowX="hidden"
+                                                textOverflow="ellipsis">
+                                                {task.engineerId}
+                                            </Td>
+                                            <Td>
+                                                {task.dueDate
+                                                    ? task.dueDate.toFormat(
+                                                          "dd/MM/yyyy",
+                                                      )
+                                                    : "-/-/-"}
+                                            </Td>
+                                        </Tr>
+                                    ))
+                                ) : (
+                                    <Tr>
+                                        <Td textAlign="center" colSpan={5}>
+                                            No tasks found
                                         </Td>
                                     </Tr>
-                                ))}
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>

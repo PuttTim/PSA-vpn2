@@ -1,5 +1,6 @@
 import {
     Box,
+    Center,
     Container,
     Heading,
     HStack,
@@ -24,10 +25,12 @@ import {
 import { useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import { Equipment } from "../Interfaces/Equipment"
+import StatusLight from "./StatusLight"
 
 type EquipmentTableProps = {
     heading: string[]
     equipment: Equipment[]
+    maintenanceEquipment: string[]
     selectedEquipmentId: string
     onSelect: (id: string) => void
     onAdd: () => void
@@ -89,7 +92,11 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                                 : "hsla(187, 71%, 61%, 0%)"
                                         }
                                         transition="background-color 0.2s ease-out">
-                                        <Td>!!!</Td>
+                                        <Td>
+                                            <Center>
+                                                <StatusLight color={props.maintenanceEquipment.includes(equipment.id) ? "redPulse" : "green"} />
+                                            </Center>
+                                        </Td>
                                         <Td>{equipment.id}</Td>
                                         <Td>{equipment.model}</Td>
                                         <Td>{equipment.location}</Td>
