@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react"
 import { DateTime } from "luxon"
 import { IoCalendarClear, IoPerson } from "react-icons/io5"
+import StatusLight from "./StatusLight"
 
 type LogNotificationCardProps = {
     title: string
@@ -91,7 +92,18 @@ const LogNotificationCard = (props: LogNotificationCardProps) => {
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
                                 <Heading fontSize="2xl">Log Status</Heading>
-                                <Text fontSize="lg">{props.type}</Text>
+                                <HStack alignItems="center">
+                                    <StatusLight
+                                        color={
+                                            props.type === "Completed"
+                                                ? "green"
+                                                : "red"
+                                        }
+                                    />
+                                    <Text fontSize="lg">
+                                        {props.type}
+                                    </Text>
+                                </HStack>
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
                                 <Heading fontSize="2xl">
