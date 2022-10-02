@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.portfix_mobile">
    <application
-        android:label="portfix_mobile"
+        android:label="PortFix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
