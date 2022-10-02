@@ -9,6 +9,8 @@ class CustomTextFormField extends StatefulWidget {
   bool passwordLengthCheck;
   bool eye;
   bool doubleCheck;
+  int minLines;
+  int maxLines;
   void Function(String?)? onSaved;
   void Function(String?)? onChanged;
   String? Function(String?)? customValidators;
@@ -24,6 +26,8 @@ class CustomTextFormField extends StatefulWidget {
     this.emailCheck = false,
     this.passwordLengthCheck = false,
     this.doubleCheck = false,
+    this.minLines = 1,
+    this.maxLines = 1,
     this.initialValue,
     Key? key,
   }) : super(key: key);
@@ -40,6 +44,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onSaved: widget.onSaved,
       onChanged: widget.onChanged,
       initialValue: widget.initialValue,
+      minLines: widget.minLines,
+      maxLines: widget.maxLines,
       decoration: InputDecoration(
         label: Text(
           widget.text,

@@ -64,6 +64,11 @@ class TaskModel {
     dueDate = Timestamp.fromDate(nextDueDate);
     return false;
   }
+
+  void assignToUser(String id) {
+    engineerId = id;
+    status = Status.inProgress;
+  }
 }
 
 class Status {

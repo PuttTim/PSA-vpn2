@@ -21,6 +21,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final EquipmentRepository _equipmentRepo = EquipmentRepository.getInstance();
   final EngineerRepository _engineerRepo = EngineerRepository.getInstance();
   final TaskRepository _taskRepository = TaskRepository.getInstance();
+  final AuthRepository _authRepository = AuthRepository.getInstance();
   String? name;
 
   Map<int, String> priorityMap = {
@@ -190,7 +191,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void navigateToLogsScreen(LogModel inCompleteLog) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => LogsScreen(
           inCompleteLog: inCompleteLog,
@@ -212,5 +213,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
     await _taskRepository.updateTask(widget.taskModel);
   }
 
-  void assignTaskToCurrentUser() async {}
+  void assignTaskToCurrentUser() async {
+    widget.taskModel.assignToUser(_authRepository.getCurrentUser()!.uid);
+    await _taskRepository.updateTask(widget.taskModel);
+    Navigator.of(context).pop();
+  }
 }

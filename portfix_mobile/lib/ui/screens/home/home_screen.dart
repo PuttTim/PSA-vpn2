@@ -63,21 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
               // show empty screen
               return Container();
             }
-            var unAssignedToUserList = snapshot.data!.where(
-              (element) => !(element.status == Status.inProgress &&
-                  element.engineerId == _authRepository.getCurrentUser()!.uid),
-            );
 
-            var inProgressList = unAssignedToUserList
-                .where((element) => element.engineerId?.isNotEmpty == true)
-                .toList();
+            var inProgressList = snapshot.data!.where(
+              (element) {
+                return element.engineerId?.isNotEmpty == true &&
+                    element.engineerId == _authRepository.getCurrentUser()!.uid;
+              },
+            ).toList();
             inProgressList.sort((a, b) {
               if (a.dueDate.millisecondsSinceEpoch >
                   b.dueDate.millisecondsSinceEpoch) return 1;
               return -1;
             });
 
-            var notStarted = unAssignedToUserList
+            var notStarted = snapshot.data!
                 .where((element) => element.engineerId?.isNotEmpty == false)
                 .toList();
             notStarted.sort((a, b) {

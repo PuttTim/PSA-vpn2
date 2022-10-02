@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfix_mobile/data/data.dart';
 import 'package:portfix_mobile/ui/screens/auth/widgets/loading.dart';
-import 'package:portfix_mobile/ui/screens/auth/widgets/wave.dart';
+import 'package:portfix_mobile/ui/widgets/wave.dart';
 import 'package:portfix_mobile/ui/screens/screens.dart';
-import 'package:portfix_mobile/ui/theme.dart';
 import 'package:portfix_mobile/ui/widgets/text_field.dart';
 import 'package:portfix_mobile/ui/utils/snackbar.dart';
 
