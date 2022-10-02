@@ -20,10 +20,10 @@ import {
     Divider,
 } from "@chakra-ui/react"
 import { DateTime } from "luxon"
+import LogNotificationCard from "../Components/LogNotificationCard"
 
 const Dashboard = () => {
     const db = getFirestore(firebaseInstance)
-    const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
     const [taskList, setTaskList] = useState<Task[]>([])
     const [logList, setLogList] = useState<Log[]>([])
 
@@ -46,20 +46,6 @@ const Dashboard = () => {
             },
         )
 
-        //     const unsubscribeEquipment = onSnapshot(
-        //         collection(db, "equipment"),
-        //         querySnapshot => {
-        //             const tempEquipmentList: Equipment[] = []
-        //             querySnapshot.forEach(doc => {
-        //                 tempEquipmentList.push({
-        //                     ...(doc.data() as Equipment),
-        //                     id: doc.id,
-        //                 })
-        //             })
-        //             setEquipmentList(tempEquipmentList)
-        //         },
-        //     )
-
         const unsubscribeLog = onSnapshot(
             collection(db, "log"),
             querySnapshot => {
@@ -79,16 +65,14 @@ const Dashboard = () => {
 
         return () => {
             unsubscribeTask()
-            // unsubscribeEquipment()
             unsubscribeLog()
         }
     }, [])
 
     useEffect(() => {
-        console.log(equipmentList)
         console.log(taskList)
         console.log(logList)
-    }, [equipmentList, taskList, logList])
+    }, [taskList, logList])
 
     const getWorkingEngineers = (taskList: Task[]) => {
         const workingEngineers = [] as any[]
@@ -167,221 +151,299 @@ const Dashboard = () => {
     }
 
     return (
-        <Box w="full">
-            <HStack spacing="900px" mb="32px">
-                <Heading>At a Glance</Heading>
-                <Heading>Notifications</Heading>
-            </HStack>
+        <HStack w="full" maxWidth="1500px" spacing="50px">
+            <Box w="full" maxWidth="1000px">
+                <Heading mb="32px">At a Glance</Heading>
+                <HStack maxWidth="1000px" spacing="25px">
+                    <Box
+                        border="2px"
+                        h="min-content"
+                        maxHeight="80vh"
+                        w="full"
+                        maxWidth="300px"
+                        borderRadius="xl"
+                        pb="20px">
+                        <VStack
+                            spacing="16px"
+                            divider={
+                                <Divider
+                                    border="1px"
+                                    borderColor="blackAlpha.900"
+                                    maxWidth="250px"
+                                />
+                            }>
+                            <Heading size="lg" pt="20px">
+                                Engineer
+                            </Heading>
 
-            <HStack maxWidth="1000px" spacing="25px">
-                <Box
-                    border="2px"
-                    h="500px"
-                    maxHeight="500px"
-                    w="full"
-                    maxWidth="300px"
-                    borderRadius="xl"
-                    pb="20px">
-                    <VStack
-                        spacing="16px"
-                        divider={
-                            <Divider
-                                border="1px"
-                                borderColor="blackAlpha.900"
-                                maxWidth="250px"
-                            />
-                        }>
-                        <Heading size="lg" pt="20px">
-                            Engineer
-                        </Heading>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getWorkingEngineers(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Working on Tasks
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getWorkingEngineers(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Working on Tasks
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getTasksCompletedToday(logList).length}{" "}
+                                    Tasks
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Completed Today
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getTasksCompletedToday(logList).length} Tasks
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Completed Today
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getTasksCompletedWeek(logList).length}{" "}
+                                    Tasks
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Completed This Week
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getTasksCompletedWeek(logList).length} Tasks
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Completed This Week
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getTasksCompletedMonth(logList).length}{" "}
+                                    Tasks
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Completed This Month
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                        </VStack>
+                    </Box>
+                    <Box
+                        border="2px"
+                        h="min-content"
+                        maxHeight="80vh"
+                        w="full"
+                        maxWidth="300px"
+                        borderRadius="xl"
+                        pb="20px">
+                        <VStack
+                            spacing="16px"
+                            divider={
+                                <Divider
+                                    border="1px"
+                                    borderColor="blackAlpha.900"
+                                    maxWidth="250px"
+                                />
+                            }>
+                            <Heading size="lg" pt="20px">
+                                Equipment
+                            </Heading>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getTasksCompletedMonth(logList).length} Tasks
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Completed This Month
-                            </StatHelpText>
-                        </Stat>
-                    </VStack>
-                </Box>
-                <Box
-                    border="2px"
-                    h="500px"
-                    maxHeight="500px"
-                    w="full"
-                    maxWidth="300px"
-                    borderRadius="xl"
-                    pb="20px">
-                    <VStack
-                        spacing="16px"
-                        divider={
-                            <Divider
-                                border="1px"
-                                borderColor="blackAlpha.900"
-                                maxWidth="250px"
-                            />
-                        }>
-                        <Heading size="lg" pt="20px">
-                            Equipment
-                        </Heading>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getOverdueTasks(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Overdue Tasks
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getOverdueTasks(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Overdue Tasks
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getMaintenanceEquipments(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    In Maintenance
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getMaintenanceEquipments(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                In Maintenance
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">...</StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                ...
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                        </VStack>
+                    </Box>
+                    <Box
+                        border="2px"
+                        h="min-content"
+                        maxHeight="80vh"
+                        w="full"
+                        maxWidth="300px"
+                        borderRadius="xl"
+                        pb="20px">
+                        <VStack
+                            spacing="16px"
+                            divider={
+                                <Divider
+                                    border="1px"
+                                    borderColor="blackAlpha.900"
+                                    maxWidth="250px"
+                                />
+                            }>
+                            <Heading size="lg" pt="20px">
+                                Tasks
+                            </Heading>
 
-                        <Stat>
-                            <StatNumber textAlign="center">...</StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                ...
-                            </StatHelpText>
-                        </Stat>
-                    </VStack>
-                </Box>
-                <Box
-                    border="2px"
-                    h="500px"
-                    maxHeight="500px"
-                    w="full"
-                    maxWidth="300px"
-                    borderRadius="xl"
-                    pb="20px">
-                    <VStack
-                        spacing="16px"
-                        divider={
-                            <Divider
-                                border="1px"
-                                borderColor="blackAlpha.900"
-                                maxWidth="250px"
-                            />
-                        }>
-                        <Heading size="lg" pt="20px">
-                            Tasks
-                        </Heading>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getInProgressTasks(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    In Progress
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getInProgressTasks(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                In Progress
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getHighPriorityTasks(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    High Priority
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getHighPriorityTasks(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                High Priority
-                            </StatHelpText>
-                        </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getMediumPriorityTasks(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Medium Priority
+                                </StatHelpText>
+                            </Stat>
 
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getMediumPriorityTasks(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Medium Priority
-                            </StatHelpText>
-                        </Stat>
-
-                        <Stat>
-                            <StatNumber textAlign="center">
-                                {getLowPriorityTasks(taskList).length}
-                            </StatNumber>
-                            <StatHelpText
-                                fontSize="lg"
-                                textColor="black"
-                                textAlign="center">
-                                Low Priority
-                            </StatHelpText>
-                        </Stat>
-                    </VStack>
-                </Box>
-            </HStack>
-        </Box>
+                            <Stat>
+                                <StatNumber textAlign="center">
+                                    {getLowPriorityTasks(taskList).length}
+                                </StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    Low Priority
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                            <Stat>
+                                <StatNumber textAlign="center">...</StatNumber>
+                                <StatHelpText
+                                    fontSize="lg"
+                                    textColor="black"
+                                    textAlign="center">
+                                    ...
+                                </StatHelpText>
+                            </Stat>
+                        </VStack>
+                    </Box>
+                </HStack>
+            </Box>
+            <Box>
+                <Heading mb="32px">Recent Logs</Heading>
+                <VStack
+                    h="min-content"
+                    maxHeight="80vh"
+                    w="100%"
+                    maxWidth="500px"
+                    pb="20px"
+                    overflow="hidden">
+                    <LogNotificationCard
+                        title="Routine Inspection"
+                        engineerName="Nasrullah"
+                        type="Cancelled"
+                        timestamp={DateTime.now()}
+                    />
+                    <LogNotificationCard
+                        title="Routine Inspection"
+                        engineerName="Nasrullah"
+                        type="Completed"
+                        timestamp={DateTime.now()}
+                    />
+                </VStack>
+            </Box>
+        </HStack>
     )
 }
 
