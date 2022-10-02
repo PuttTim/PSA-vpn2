@@ -19,7 +19,7 @@ const Navbar = () => {
     const location = useLocation()
 
     return (
-        <Box bgColor="hsl(0, 0%, 99%)" paddingX={4} paddingY={2.5}>
+        <Box bgColor="hsl(0, 0%, 99%)" mb={10} paddingX={4} paddingY={2.5}>
             <HStack>
                 <Image src={portFixLogoText} width="8%" objectFit="cover" />
                 <HStack spacing={5} style={{ marginLeft: "3em" }}>
