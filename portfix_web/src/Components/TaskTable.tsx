@@ -130,11 +130,6 @@ const TaskTable = (props: TaskTableProps) => {
             engineerId: taskForm.engineerId,
             description: taskForm.description,
         })
-
-        console.log("bruh")
-
-        console.log(taskForm, "finall")
-
         setTaskForm({
             title: "",
             status: "Not Started",
