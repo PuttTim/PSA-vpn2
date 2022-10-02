@@ -432,12 +432,16 @@ const Dashboard = () => {
                     <LogNotificationCard
                         title="Routine Inspection"
                         engineerName="Nasrullah"
+                        equipmentId="CR4"
+                        comment="Not working"
                         type="Cancelled"
                         timestamp={DateTime.now()}
                     />
                     <LogNotificationCard
                         title="Routine Inspection"
                         engineerName="Nasrullah"
+                        equipmentId="CR4"
+                        comment="Not working"
                         type="Completed"
                         timestamp={DateTime.now()}
                     />
