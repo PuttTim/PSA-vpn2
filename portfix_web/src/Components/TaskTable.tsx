@@ -39,7 +39,14 @@ import {
     Select,
     Textarea,
 } from "@chakra-ui/react"
-import { getFirestore, collection, onSnapshot } from "firebase/firestore"
+import { Timestamp } from "@google-cloud/firestore"
+import {
+    getFirestore,
+    collection,
+    onSnapshot,
+    doc,
+    addDoc,
+} from "firebase/firestore"
 import { DateTime } from "luxon"
 import React, { useEffect, useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
@@ -70,7 +77,7 @@ const TaskTable = (props: TaskTableProps) => {
         priority: 1,
         repeat: 0,
         equipmentId: "",
-        engineerId: undefined as string | undefined,
+        engineerId: null as string | null,
         description: "",
     })
 
@@ -112,14 +119,32 @@ const TaskTable = (props: TaskTableProps) => {
         }
     }, [])
 
-    useEffect(() => {
-        console.log(taskForm)
-    }, [taskForm])
-
     const addTask = () => {
+        addDoc(collection(db, "task"), {
+            title: taskForm.title,
+            status: taskForm.status,
+            dueDate: taskForm.dueDate.toJSDate(),
+            priority: taskForm.priority,
+            repeat: taskForm.repeat,
+            equipmentId: taskForm.equipmentId,
+            engineerId: taskForm.engineerId,
+            description: taskForm.description,
+        })
+
         console.log("bruh")
 
         console.log(taskForm, "finall")
+
+        setTaskForm({
+            title: "",
+            status: "Not Started",
+            dueDate: DateTime.now(),
+            priority: 1,
+            repeat: 0,
+            equipmentId: "",
+            engineerId: null as string | null,
+            description: "",
+        })
 
         onClose()
     }

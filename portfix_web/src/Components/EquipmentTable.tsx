@@ -62,6 +62,15 @@ const EquipmentTable = (props: EquipmentTableProps) => {
             location: equipmentForm.location,
             geopoint: new GeoPoint(equipmentForm.lat, equipmentForm.lon),
         })
+
+        setEquipmentForm({
+            id: "",
+            model: "",
+            location: "",
+            lat: 0,
+            lon: 0,
+        })
+
         onClose()
     }
 
