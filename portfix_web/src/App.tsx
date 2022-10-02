@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import Navbar from "./Components/Navbar"
-import EquipmentPage from "./Pages/Equipment"
+import EquipmentPage from "./Pages/EquipmentPage"
 import Dashboard from "./Pages/Dashboard"
-import Engineer from "./Pages/Engineer"
+import EngineerPage from "./Pages/EngineerPage"
 import { Box } from "@chakra-ui/react"
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/equipment" element={<EquipmentPage />} />
-                    <Route path="/engineer" element={<Engineer />} />
+                    <Route path="/engineer" element={<EngineerPage />} />
                 </Routes>
             </Box>
         </>

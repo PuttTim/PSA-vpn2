@@ -1,46 +1,50 @@
 import {
-    Box,
+    useDisclosure,
     Container,
-    Heading,
+    VStack,
     HStack,
+    Heading,
     IconButton,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Table,
     TableContainer,
-    Tbody,
-    Td,
-    Th,
+    Table,
     Thead,
     Tr,
-    useDisclosure,
-    VStack,
+    Th,
+    Tbody,
+    Td,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { DateTime } from "luxon"
+import React, { useEffect } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
-import { Equipment } from "../Interfaces/Equipment"
+import firebaseInstance from "../firebase"
+import { Task } from "../Interfaces/Task"
 
-type EquipmentTableProps = {
+type TaskTableProps = {
     heading: string[]
-    equipment: Equipment[]
-    onSelect: (id: string) => void
+    tasks: Task[]
+    // onSelect: (id: string) => void
     onAdd: () => void
 }
 
-const EquipmentTable = (props: EquipmentTableProps) => {
+const TaskTable = (props: TaskTableProps) => {
+    const db = getFirestore(firebaseInstance)
+
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [engineerNameList, setEngineerNameList] = React.useState<string[]>([])
 
     return (
         <>
             <Container
                 h="full"
                 maxH="100%"
-                maxW="full"
                 overflowY="scroll"
                 outline="2.5px solid black"
                 borderRadius="xl">
@@ -51,8 +55,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                         px={5}
                         py={3}
                         justifyContent="space-between">
-                        <Heading size="lg">Equipment</Heading>
-
+                        <Heading size="lg">Tasks</Heading>
                         <IconButton
                             aria-label="Add new item"
                             icon={<IoAdd size="1.5em" />}
@@ -73,24 +76,21 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {props.equipment.map((equipment, index) => (
+                                {props.tasks.map((task, index) => (
                                     <Tr
                                         key={index}
-                                        onClick={() =>
-                                            props.onSelect(equipment.id)
-                                        }>
-                                        <Td>!!!</Td>
-                                        <Td>{equipment.id}</Td>
-                                        <Td>{equipment.model}</Td>
-                                        <Td>{equipment.location}</Td>
+                                        // onClick={() => props.onSelect(task.id)}
+                                    >
+                                        <Td>{task.priority}</Td>
+                                        <Td>{task.status}</Td>
+                                        <Td>{task.title}</Td>
+                                        <Td>{task.engineerId}</Td>
                                         <Td>
-                                            <IconButton
-                                                aria-label="More Info"
-                                                icon={
-                                                    <IoInformation size="1.5em" />
-                                                }
-                                                isRound={true}
-                                            />
+                                            {task.dueDate
+                                                ? task.dueDate.toFormat(
+                                                      "dd/MM/yyyy",
+                                                  )
+                                                : "-/-/-"}
                                         </Td>
                                     </Tr>
                                 ))}
@@ -103,7 +103,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Add New Equipment</ModalHeader>
+                    <ModalHeader>Add New Task</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>TODO</ModalBody> {/*TODO Add form*/}
                     <ModalFooter />
@@ -113,4 +113,4 @@ const EquipmentTable = (props: EquipmentTableProps) => {
     )
 }
 
-export default EquipmentTable
+export default TaskTable
