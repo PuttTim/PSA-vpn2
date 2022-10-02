@@ -48,10 +48,25 @@ class TaskModel {
       "equipmentId": equipmentId,
     };
   }
+
+  void cancel() {
+    engineerId = null;
+    status = Status.notStarted;
+  }
+
+  /// returns `true` if the task should be deleted after completing it
+  bool complete() {
+    cancel();
+    if (repeat == 0) return true;
+    var nextDueDate = DateTime.now().add(
+      Duration(days: repeat),
+    );
+    dueDate = Timestamp.fromDate(nextDueDate);
+    return false;
+  }
 }
 
 class Status {
   static const String notStarted = "Not Started";
   static const String inProgress = "In Progress";
-  static const String completed = "Completed";
 }

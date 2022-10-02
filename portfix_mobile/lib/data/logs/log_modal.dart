@@ -23,7 +23,6 @@ class LogModel {
   LogModel.fromTask({
     String? id,
     required TaskModel task,
-    required String comment,
     required String type,
   }) : this(
           id: id,
@@ -31,7 +30,7 @@ class LogModel {
           engineerId: task.engineerId!,
           equipmentId: task.equipmentId,
           timestamp: Timestamp.now(),
-          comment: comment,
+          comment: "",
           type: type,
         );
 
