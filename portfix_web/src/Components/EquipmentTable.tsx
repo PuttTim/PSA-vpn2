@@ -37,7 +37,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
 
     return (
         <>
-            <Container
+            <Box
                 h="full"
                 maxH="100%"
                 maxW="full"
@@ -98,7 +98,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                         </Table>
                     </TableContainer>
                 </VStack>
-            </Container>
+            </Box>
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

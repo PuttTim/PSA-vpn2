@@ -19,6 +19,7 @@ import {
     ModalCloseButton,
     ModalBody,
     ModalFooter,
+    Box,
 } from "@chakra-ui/react"
 import { doc, getDoc, getFirestore } from "firebase/firestore"
 import { DateTime } from "luxon"
@@ -42,9 +43,10 @@ const TaskTable = (props: TaskTableProps) => {
 
     return (
         <>
-            <Container
+            <Box
                 h="full"
                 maxH="100%"
+                maxW="full"
                 overflowY="scroll"
                 outline="2.5px solid black"
                 borderRadius="xl">
@@ -84,7 +86,12 @@ const TaskTable = (props: TaskTableProps) => {
                                         <Td>{task.priority}</Td>
                                         <Td>{task.status}</Td>
                                         <Td>{task.title}</Td>
-                                        <Td>{task.engineerId}</Td>
+                                        <Td
+                                            maxW="15ch"
+                                            overflowX="hidden"
+                                            textOverflow="ellipsis">
+                                            {task.engineerId}
+                                        </Td>
                                         <Td>
                                             {task.dueDate
                                                 ? task.dueDate.toFormat(
@@ -98,7 +105,7 @@ const TaskTable = (props: TaskTableProps) => {
                         </Table>
                     </TableContainer>
                 </VStack>
-            </Container>
+            </Box>
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

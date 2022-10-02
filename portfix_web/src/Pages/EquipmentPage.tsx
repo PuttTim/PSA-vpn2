@@ -136,7 +136,7 @@ const EquipmentPage = () => {
                     />
                 </GridItem>
                 <GridItem rowSpan={2} colSpan={1}>
-                    <Box border="2px" h="full">
+                    <Box h="full" outline="2.5px solid black" borderRadius="xl">
                         {equipmentId}
                     </Box>
                 </GridItem>
