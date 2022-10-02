@@ -1,10 +1,14 @@
 import {
     Box,
+    Container,
     Grid,
     GridItem,
     HStack,
     Stat,
+    StatGroup,
+    StatHelpText,
     StatLabel,
+    StatNumber,
     VStack,
 } from "@chakra-ui/react"
 import { GeoPoint } from "@google-cloud/firestore"
@@ -30,6 +34,7 @@ const EquipmentPage = () => {
     const [equipmentId, setEquipmentId] = useState("0")
     const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
     const [taskList, setTaskList] = useState<Task[]>([])
+    const [fullTaskList, setFullTaskList] = useState<Task[]>([])
 
     useEffect(() => {
         const unsubscribeEquipment = onSnapshot(
@@ -84,6 +89,7 @@ const EquipmentPage = () => {
                             return b.priority - a.priority
                         })
                         setTaskList(tempTaskList)
+                        setFullTaskList(tempTaskList)
                     })
                 })
             },
@@ -95,12 +101,24 @@ const EquipmentPage = () => {
         }
     }, [])
 
+    useEffect(() => {
+        if (equipmentId !== "0") {
+            setTaskList(
+                fullTaskList.filter(task => task.equipmentId === equipmentId),
+            )
+        } else {
+            setTaskList(fullTaskList)
+        }
+    }, [equipmentId])
+
     const selectEquipment = (id: string) => {
         if (id === equipmentId) {
             setEquipmentId("0")
         } else {
             setEquipmentId(id)
         }
+
+        console.log(id)
     }
 
     const addEquipment = () => {
@@ -111,10 +129,22 @@ const EquipmentPage = () => {
         console.log("Add task")
     }
 
+    const getNumberOfOverdueTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.dueDate.diffNow().as("days") < 0
+        }).length
+    }
+
+    const getNumberOfInprogressTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.status === "In Progress"
+        }).length
+    }
+
     return (
         <Box w="full">
             <Grid
-                h="full"
+                maxH="85vh"
                 w="full"
                 alignItems="stretch"
                 justifyContent="center"
@@ -131,14 +161,42 @@ const EquipmentPage = () => {
                             "Info",
                         ]}
                         equipment={equipmentList}
+                        selectedEquipmentId={equipmentId}
                         onSelect={selectEquipment}
                         onAdd={addEquipment}
                     />
                 </GridItem>
                 <GridItem rowSpan={2} colSpan={1}>
-                    <Box h="full" outline="2.5px solid black" borderRadius="xl">
-                        {equipmentId}
-                    </Box>
+                    <Container
+                        h="full"
+                        maxW="40vw"
+                        minW="40vw"
+                        p={8}
+                        outline="2.5px solid black"
+                        borderRadius="xl"
+                        display="flex"
+                        alignItems="center">
+                        <StatGroup w="full" fontSize={24}>
+                            <Stat size="lg">
+                                <StatLabel>Overdue Tasks</StatLabel>
+                                <StatNumber fontSize={38}>
+                                    {getNumberOfOverdueTasks(taskList)}
+                                </StatNumber>
+                                <StatHelpText fontSize={16}>
+                                    Tasks that are past the due date
+                                </StatHelpText>
+                            </Stat>
+                            <Stat size="lg">
+                                <StatLabel>In Progress</StatLabel>
+                                <StatNumber fontSize={38}>
+                                    {getNumberOfInprogressTasks(taskList)}
+                                </StatNumber>
+                                <StatHelpText fontSize={16}>
+                                    Tasks that are currently being worked on
+                                </StatHelpText>
+                            </Stat>
+                        </StatGroup>
+                    </Container>
                 </GridItem>
                 <GridItem rowSpan={3} colSpan={1}>
                     <TaskTable

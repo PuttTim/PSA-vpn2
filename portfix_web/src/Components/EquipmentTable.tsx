@@ -28,6 +28,7 @@ import { Equipment } from "../Interfaces/Equipment"
 type EquipmentTableProps = {
     heading: string[]
     equipment: Equipment[]
+    selectedEquipmentId: string
     onSelect: (id: string) => void
     onAdd: () => void
 }
@@ -37,10 +38,11 @@ const EquipmentTable = (props: EquipmentTableProps) => {
 
     return (
         <>
-            <Box
+            <Container
                 h="full"
                 maxH="100%"
-                maxW="full"
+                maxW="52vw"
+                minW="52vw"
                 overflowY="scroll"
                 outline="2.5px solid black"
                 borderRadius="xl">
@@ -78,7 +80,15 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                         key={index}
                                         onClick={() =>
                                             props.onSelect(equipment.id)
-                                        }>
+                                        }
+                                        cursor="pointer"
+                                        bgColor={
+                                            equipment.id ===
+                                            props.selectedEquipmentId
+                                                ? "hsla(187, 71%, 61%, 15%)"
+                                                : "hsla(187, 71%, 61%, 0%)"
+                                        }
+                                        transition="background-color 0.2s ease-out">
                                         <Td>!!!</Td>
                                         <Td>{equipment.id}</Td>
                                         <Td>{equipment.model}</Td>
@@ -98,7 +108,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                         </Table>
                     </TableContainer>
                 </VStack>
-            </Box>
+            </Container>
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

@@ -43,10 +43,11 @@ const TaskTable = (props: TaskTableProps) => {
 
     return (
         <>
-            <Box
+            <Container
                 h="full"
                 maxH="100%"
-                maxW="full"
+                maxW="40vw"
+                minW="40vw"
                 overflowY="scroll"
                 outline="2.5px solid black"
                 borderRadius="xl">
@@ -105,7 +106,7 @@ const TaskTable = (props: TaskTableProps) => {
                         </Table>
                     </TableContainer>
                 </VStack>
-            </Box>
+            </Container>
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
