@@ -27,10 +27,10 @@ import {
     useDisclosure,
     VStack,
 } from "@chakra-ui/react"
-import { GeoPoint } from "firebase/firestore"
-import { useState } from "react"
-import MapPicker from "react-google-map-picker"
+import { GeoPoint, getFirestore } from "firebase/firestore"
+import { useEffect, useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
+import firebaseInstance from "../firebase"
 import { Equipment } from "../Interfaces/Equipment"
 import StatusLight from "./StatusLight"
 
@@ -43,32 +43,22 @@ type EquipmentTableProps = {
     onAdd: () => void
 }
 
-interface EquipmentForm {
-    id: string
-    model: string
-    location: string
-    geopoint: GeoPoint
-}
-
 const EquipmentTable = (props: EquipmentTableProps) => {
+    const db = getFirestore(firebaseInstance)
+
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [equipmentForm, setEquipmentForm] = useState({
         id: "",
         model: "",
         location: "",
-        geopoint: new GeoPoint(1, 2),
+        lat: 0,
+        lon: 0,
     })
-
-    const [geopoint, setGeopoint] = useState<GeoPoint>(new GeoPoint(1, 2))
 
     const addEquipment = () => {
         console.log("bruh")
-    }
-
-    function handleChangeLocation(lat: number, lng: number) {
-        const tempGeopoint = new GeoPoint(lat, lng)
-        setGeopoint(tempGeopoint)
+        console.log(equipmentForm)
     }
 
     return (
@@ -178,6 +168,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                 Eg. ARMG11, CR6, PM03
                             </FormHelperText>
                             <br />
+
                             <FormLabel>Model</FormLabel>
                             <Input
                                 type="text"
@@ -192,6 +183,7 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                 Eg. Ship to shore container crane, Prime mover
                             </FormHelperText>
                             <br />
+
                             <FormLabel>Location</FormLabel>
                             <Input
                                 type="text"
@@ -204,11 +196,40 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                             />
                             <FormHelperText>Eg. PPT6</FormHelperText>
                             <br />
-                            <FormLabel>Geopoint</FormLabel>
-                            
+
+                            <FormLabel>
+                                Geopoint (Latitude & Longitude)
+                            </FormLabel>
+                            <HStack>
+                                <Input
+                                    type="number"
+                                    min="-90"
+                                    max="90"
+                                    placeholder="Latitude"
+                                    onChange={e =>
+                                        setEquipmentForm({
+                                            ...equipmentForm,
+                                            lat: e.target
+                                                .value as unknown as number,
+                                        })
+                                    }
+                                />
+                                <Input
+                                    type="number"
+                                    min="-180"
+                                    max="180"
+                                    placeholder="Longitude"
+                                    onChange={e =>
+                                        setEquipmentForm({
+                                            ...equipmentForm,
+                                            lon: e.target
+                                                .value as unknown as number,
+                                        })
+                                    }
+                                />
+                            </HStack>
                             <FormHelperText>
-                                Drag and drop the pointer to the equipment's
-                                location
+                                Eg. 1.26920 & 103.78640
                             </FormHelperText>
                         </FormControl>
                     </ModalBody>
@@ -217,7 +238,9 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                             disabled={
                                 equipmentForm.id === "" ||
                                 equipmentForm.model === "" ||
-                                equipmentForm.location === ""
+                                equipmentForm.location === "" ||
+                                equipmentForm.lat === 0 ||
+                                equipmentForm.lon === 0
                             }
                             onClick={addEquipment}
                             colorScheme="teal">
