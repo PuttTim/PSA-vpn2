@@ -82,6 +82,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   title: "Priority",
                   content: priorityMap[widget.taskModel.priority]!,
                 ),
+                CardWidget(
+                  width: double.infinity,
+                  title: "Location",
+                  content: equipmentSnapshot.data!.location,
+                ),
                 Row(
                   children: [
                     CardWidget(
