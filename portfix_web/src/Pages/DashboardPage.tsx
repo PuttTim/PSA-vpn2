@@ -456,22 +456,20 @@ const DashboardPage = () => {
                     overflow="hidden">
                     {getMostRecentLogs(logList)
                         .slice(0, 6)
-                        .map((log, i) => {
-                            return (
-                                <LogNotificationCard
-                                    key={i}
-                                    title={log.title}
-                                    type={log.type}
-                                    engineerName={
-                                        getEngineerById(log.engineerId)?.name ??
-                                        "Unknown"
-                                    }
-                                    equipmentId={log.equipmentId}
-                                    comment={log.comment}
-                                    timestamp={log.timestamp}
-                                />
-                            )
-                        })}
+                        .map((log, i) => (
+                            <LogNotificationCard
+                                key={i}
+                                title={log.title}
+                                type={log.type}
+                                engineerName={
+                                    getEngineerById(log.engineerId)?.name ??
+                                    "Unknown"
+                                }
+                                equipmentId={log.equipmentId}
+                                comment={log.comment}
+                                timestamp={log.timestamp}
+                            />
+                        ))}
                 </VStack>
             </Box>
         </HStack>

@@ -86,15 +86,11 @@ const LogNotificationCard = (props: LogNotificationCardProps) => {
                                 <Text fontSize="lg">{props.engineerName}</Text>
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
-                                <Heading fontSize="2xl">
-                                    Equipment Name (ID)
-                                </Heading>
+                                <Heading fontSize="2xl">Equipment ID</Heading>
                                 <Text fontSize="lg">{props.equipmentId}</Text>
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
-                                <Heading fontSize="2xl">
-                                    Equipment Status
-                                </Heading>
+                                <Heading fontSize="2xl">Log Status</Heading>
                                 <Text fontSize="lg">{props.type}</Text>
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
