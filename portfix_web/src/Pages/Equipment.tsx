@@ -8,18 +8,53 @@ import {
     VStack,
 } from "@chakra-ui/react"
 import { GeoPoint } from "@google-cloud/firestore"
-import { useState } from "react"
+import {
+    getFirestore,
+    getDocs,
+    collection,
+    onSnapshot,
+} from "firebase/firestore"
+import { useEffect, useState } from "react"
 import EquipmentTable from "../Components/EquipmentTable"
+import firebaseInstance from "../firebase"
+import { Equipment } from "../Interfaces/Equipment"
 
-const Equipment = () => {
+const EquipmentPage = () => {
+    const db = getFirestore(firebaseInstance)
+
     const [equipmentId, setEquipmentId] = useState("0")
+    const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
 
+    useEffect(() => {
+        const unsubscribeEquipment = onSnapshot(
+            collection(db, "equipment"),
+            querySnapshot => {
+                const tempEquipmentList: Equipment[] = []
+                querySnapshot.forEach(doc => {
+                    tempEquipmentList.push({
+                        id: doc.id,
+                        model: doc.data().model,
+                        location: doc.data().location,
+                        geopoint: doc.data().geopoint,
+                    })
+                })
+                setEquipmentList(tempEquipmentList)
+            },
+        )
+
+        return () => unsubscribeEquipment()
+    }, [])
+    
     const selectEquipment = (id: string) => {
         if (id === equipmentId) {
             setEquipmentId("0")
         } else {
             setEquipmentId(id)
         }
+    }
+
+    const addEquipment = () => {
+        console.log("Add equipment")
     }
 
     return (
@@ -39,27 +74,9 @@ const Equipment = () => {
                             "Location",
                             "Info",
                         ]}
-                        equipment={[
-                            {
-                                id: "1",
-                                model: "Model 1",
-                                location: "Location 1",
-                                geopoint: new GeoPoint(1, 1),
-                            },
-                            {
-                                id: "2",
-                                model: "Model 2",
-                                location: "Location 2",
-                                geopoint: new GeoPoint(1, 1),
-                            },
-                            {
-                                id: "3",
-                                model: "Model 3",
-                                location: "Location 3",
-                                geopoint: new GeoPoint(1, 1),
-                            },
-                        ]}
+                        equipment={equipmentList}
                         onSelect={selectEquipment}
+                        onAdd={addEquipment}
                     />
                 </GridItem>
                 <GridItem rowSpan={2} colSpan={1}>
@@ -73,4 +90,4 @@ const Equipment = () => {
     )
 }
 
-export default Equipment
+export default EquipmentPage

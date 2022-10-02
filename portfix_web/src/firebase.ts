@@ -5,13 +5,15 @@ import { initializeApp } from "firebase/app"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyDPDfWIC_kokSHIA0yc3fcFwQsJw1KERLc",
-	authDomain: "psa-vpn2.firebaseapp.com",
-	projectId: "psa-vpn2",
-	storageBucket: "psa-vpn2.appspot.com",
-	messagingSenderId: "989640490656",
-	appId: "1:989640490656:web:dd6c4963dfe73a8c5413c5",
+    apiKey: "AIzaSyDPDfWIC_kokSHIA0yc3fcFwQsJw1KERLc",
+    authDomain: "psa-vpn2.firebaseapp.com",
+    projectId: "psa-vpn2",
+    storageBucket: "psa-vpn2.appspot.com",
+    messagingSenderId: "989640490656",
+    appId: "1:989640490656:web:dd6c4963dfe73a8c5413c5",
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+const firebaseInstance = initializeApp(firebaseConfig)
+
+export default firebaseInstance
