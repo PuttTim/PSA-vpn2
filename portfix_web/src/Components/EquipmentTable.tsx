@@ -134,15 +134,6 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                         <Td>{equipment.id}</Td>
                                         <Td>{equipment.model}</Td>
                                         <Td>{equipment.location}</Td>
-                                        <Td>
-                                            <IconButton
-                                                aria-label="More Info"
-                                                icon={
-                                                    <IoInformation size="1.5em" />
-                                                }
-                                                isRound={true}
-                                            />
-                                        </Td>
                                     </Tr>
                                 ))}
                             </Tbody>

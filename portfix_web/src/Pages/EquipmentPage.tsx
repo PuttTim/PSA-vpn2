@@ -179,13 +179,7 @@ const EquipmentPage = () => {
                 gap={8}>
                 <GridItem maxH="full" rowSpan={5} colSpan={1}>
                     <EquipmentTable
-                        heading={[
-                            "Status",
-                            "Equipment",
-                            "Model",
-                            "Location",
-                            "Info",
-                        ]}
+                        heading={["Status", "Equipment", "Model", "Location"]}
                         equipment={equipmentList}
                         selectedEquipmentId={equipmentId}
                         maintenanceEquipment={maintenanceEquipment}
