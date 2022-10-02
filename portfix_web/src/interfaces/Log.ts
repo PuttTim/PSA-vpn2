@@ -1,9 +1,9 @@
 export interface Log {
-    id: String
-    title: String
-    engineerId: String
-    equipmentId: String
+    id: string
+    title: string
+    engineerId: string
+    equipmentId: string
     timestamp: Date
-    comment: String
+    comment: string
     type: "Cancelled" | "Completed"
 }
