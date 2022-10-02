@@ -1,10 +1,15 @@
 import {
     Box,
+    Button,
     Center,
     Container,
+    FormControl,
+    FormHelperText,
+    FormLabel,
     Heading,
     HStack,
     IconButton,
+    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -22,7 +27,9 @@ import {
     useDisclosure,
     VStack,
 } from "@chakra-ui/react"
+import { GeoPoint } from "firebase/firestore"
 import { useState } from "react"
+import MapPicker from "react-google-map-picker"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import { Equipment } from "../Interfaces/Equipment"
 import StatusLight from "./StatusLight"
@@ -36,8 +43,33 @@ type EquipmentTableProps = {
     onAdd: () => void
 }
 
+interface EquipmentForm {
+    id: string
+    model: string
+    location: string
+    geopoint: GeoPoint
+}
+
 const EquipmentTable = (props: EquipmentTableProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [equipmentForm, setEquipmentForm] = useState({
+        id: "",
+        model: "",
+        location: "",
+        geopoint: new GeoPoint(1, 2),
+    })
+
+    const [geopoint, setGeopoint] = useState<GeoPoint>(new GeoPoint(1, 2))
+
+    const addEquipment = () => {
+        console.log("bruh")
+    }
+
+    function handleChangeLocation(lat: number, lng: number) {
+        const tempGeopoint = new GeoPoint(lat, lng)
+        setGeopoint(tempGeopoint)
+    }
 
     return (
         <>
@@ -94,7 +126,15 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                                         transition="background-color 0.2s ease-out">
                                         <Td>
                                             <Center>
-                                                <StatusLight color={props.maintenanceEquipment.includes(equipment.id) ? "redPulse" : "green"} />
+                                                <StatusLight
+                                                    color={
+                                                        props.maintenanceEquipment.includes(
+                                                            equipment.id,
+                                                        )
+                                                            ? "redPulse"
+                                                            : "green"
+                                                    }
+                                                />
                                             </Center>
                                         </Td>
                                         <Td>{equipment.id}</Td>
@@ -122,8 +162,68 @@ const EquipmentTable = (props: EquipmentTableProps) => {
                 <ModalContent>
                     <ModalHeader>Add New Equipment</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>TODO</ModalBody> {/*TODO Add form*/}
-                    <ModalFooter />
+                    <ModalBody>
+                        <FormControl isRequired>
+                            <FormLabel>Equipment Id</FormLabel>
+                            <Input
+                                type="text"
+                                onChange={e =>
+                                    setEquipmentForm({
+                                        ...equipmentForm,
+                                        id: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormHelperText>
+                                Eg. ARMG11, CR6, PM03
+                            </FormHelperText>
+                            <br />
+                            <FormLabel>Model</FormLabel>
+                            <Input
+                                type="text"
+                                onChange={e =>
+                                    setEquipmentForm({
+                                        ...equipmentForm,
+                                        model: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormHelperText>
+                                Eg. Ship to shore container crane, Prime mover
+                            </FormHelperText>
+                            <br />
+                            <FormLabel>Location</FormLabel>
+                            <Input
+                                type="text"
+                                onChange={e =>
+                                    setEquipmentForm({
+                                        ...equipmentForm,
+                                        location: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormHelperText>Eg. PPT6</FormHelperText>
+                            <br />
+                            <FormLabel>Geopoint</FormLabel>
+                            
+                            <FormHelperText>
+                                Drag and drop the pointer to the equipment's
+                                location
+                            </FormHelperText>
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            disabled={
+                                equipmentForm.id === "" ||
+                                equipmentForm.model === "" ||
+                                equipmentForm.location === ""
+                            }
+                            onClick={addEquipment}
+                            colorScheme="teal">
+                            Add Equipment
+                        </Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
