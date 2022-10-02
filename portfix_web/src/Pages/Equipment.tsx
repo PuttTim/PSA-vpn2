@@ -7,13 +7,7 @@ import {
     StatLabel,
     VStack,
 } from "@chakra-ui/react"
-import { GeoPoint } from "@google-cloud/firestore"
-import {
-    getFirestore,
-    getDocs,
-    collection,
-    onSnapshot,
-} from "firebase/firestore"
+import { getFirestore, collection, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import EquipmentTable from "../Components/EquipmentTable"
 import firebaseInstance from "../firebase"
@@ -44,7 +38,7 @@ const EquipmentPage = () => {
 
         return () => unsubscribeEquipment()
     }, [])
-    
+
     const selectEquipment = (id: string) => {
         if (id === equipmentId) {
             setEquipmentId("0")
