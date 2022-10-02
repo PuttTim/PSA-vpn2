@@ -14,6 +14,7 @@ import {
 import { collection, getFirestore, onSnapshot } from "firebase/firestore"
 import { DateTime } from "luxon"
 import React, { useEffect, useState } from "react"
+import StatusLight from "../Components/StatusLight"
 import firebaseInstance from "../firebase"
 import { Engineer } from "../Interfaces/Engineer"
 import { Log } from "../Interfaces/Log"
@@ -97,7 +98,15 @@ const LogPage = () => {
                     <Tbody>
                         {getMostRecentLogs(logList).map(log => (
                             <Tr key={log.id}>
-                                <Td>{log.type}</Td>
+                                <Td textAlign="center">
+                                    <StatusLight
+                                        color={
+                                            log.type === "Completed"
+                                                ? "green"
+                                                : "red"
+                                        }
+                                    />
+                                </Td>
                                 <Td>{log.title}</Td>
                                 <Td>
                                     {getEngineerById(log.engineerId)?.name ??
