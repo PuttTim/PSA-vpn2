@@ -19,6 +19,7 @@ import {
     Center,
     Divider,
 } from "@chakra-ui/react"
+import { DateTime } from "luxon"
 
 const Dashboard = () => {
     const db = getFirestore(firebaseInstance)
@@ -26,61 +27,144 @@ const Dashboard = () => {
     const [taskList, setTaskList] = useState<Task[]>([])
     const [logList, setLogList] = useState<Log[]>([])
 
-    // useEffect(() => {
-    //     const unsubscribeTask = onSnapshot(
-    //         collection(db, "task"),
-    //         querySnapshot => {
-    //             const tempTaskList: Task[] = []
-    //             querySnapshot.forEach(doc => {
-    //                 tempTaskList.push({
-    //                     ...(doc.data() as Task),
-    //                     id: doc.id,
-    //                 })
-    //             })
+    useEffect(() => {
+        const unsubscribeTask = onSnapshot(
+            collection(db, "task"),
+            querySnapshot => {
+                const tempTaskList: Task[] = []
+                querySnapshot.forEach(doc => {
+                    tempTaskList.push({
+                        ...(doc.data() as Task),
+                        id: doc.id,
+                        dueDate: DateTime.fromSeconds(
+                            doc.data().dueDate.seconds,
+                        ),
+                    })
+                })
 
-    //             setTaskList(tempTaskList)
-    //         },
-    //     )
-    //     const unsubscribeEquipment = onSnapshot(
-    //         collection(db, "equipment"),
-    //         querySnapshot => {
-    //             const tempEquipmentList: Equipment[] = []
-    //             querySnapshot.forEach(doc => {
-    //                 tempEquipmentList.push({
-    //                     ...(doc.data() as Equipment),
-    //                     id: doc.id,
-    //                 })
-    //             })
-    //             setEquipmentList(tempEquipmentList)
-    //         },
-    //     )
+                setTaskList(tempTaskList)
+            },
+        )
 
-    //     const unsubscribeLog = onSnapshot(
-    //         collection(db, "log"),
-    //         querySnapshot => {
-    //             const tempLogList: Log[] = []
-    //             querySnapshot.forEach(doc => {
-    //                 tempLogList.push({
-    //                     ...(doc.data() as Log),
-    //                     id: doc.id,
-    //                 })
-    //             })
-    //             setLogList(tempLogList)
-    //         },
-    //     )
+        //     const unsubscribeEquipment = onSnapshot(
+        //         collection(db, "equipment"),
+        //         querySnapshot => {
+        //             const tempEquipmentList: Equipment[] = []
+        //             querySnapshot.forEach(doc => {
+        //                 tempEquipmentList.push({
+        //                     ...(doc.data() as Equipment),
+        //                     id: doc.id,
+        //                 })
+        //             })
+        //             setEquipmentList(tempEquipmentList)
+        //         },
+        //     )
 
-    //     return () => {
-    //         unsubscribeTask()
-    //         unsubscribeEquipment()
-    //         unsubscribeLog()
-    //     }
-    // }, [])
+        const unsubscribeLog = onSnapshot(
+            collection(db, "log"),
+            querySnapshot => {
+                const tempLogList: Log[] = []
+                querySnapshot.forEach(doc => {
+                    tempLogList.push({
+                        ...(doc.data() as Log),
+                        id: doc.id,
+                        timestamp: DateTime.fromSeconds(
+                            doc.data().timestamp.seconds,
+                        ),
+                    })
+                })
+                setLogList(tempLogList)
+            },
+        )
+
+        return () => {
+            unsubscribeTask()
+            // unsubscribeEquipment()
+            unsubscribeLog()
+        }
+    }, [])
 
     useEffect(() => {
         console.log(equipmentList)
         console.log(taskList)
         console.log(logList)
     }, [equipmentList, taskList, logList])
+
+    const getWorkingEngineers = (taskList: Task[]) => {
+        const workingEngineers = [] as any[]
+        const inProgressTasks = getInProgressTasks(taskList)
+        inProgressTasks.filter(task => {
+            if (!workingEngineers.includes(task.engineerId)) {
+                workingEngineers.push(task.engineerId)
+            }
+        })
+        return workingEngineers
+    }
+
+    const getTasksCompletedToday = (logList: Log[]) => {
+        return logList.filter(log => {
+            const diffInDays = log.timestamp.diffNow().as("days")
+
+            return diffInDays < 0 && diffInDays > -1
+        })
+    }
+
+    const getTasksCompletedWeek = (logList: Log[]) => {
+        return logList.filter(log => {
+            const diffInDays = log.timestamp.diffNow().as("days")
+
+            return diffInDays < 0 && diffInDays > -7
+        })
+    }
+
+    const getTasksCompletedMonth = (logList: Log[]) => {
+        return logList.filter(log => {
+            const diffInDays = log.timestamp.diffNow().as("days")
+
+            return diffInDays < 0 && diffInDays > -30
+        })
+    }
+
+    const getOverdueTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.dueDate.diffNow().as("days") < 0
+        })
+    }
+
+    const getMaintenanceEquipments = (taskList: Task[]) => {
+        const maintenanceEquipment = [] as any[]
+        const inProgressTasks = getInProgressTasks(taskList)
+        inProgressTasks.filter(task => {
+            if (!maintenanceEquipment.includes(task.equipmentId)) {
+                maintenanceEquipment.push(task.equipmentId)
+            }
+        })
+        return maintenanceEquipment
+    }
+
+    const getInProgressTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.status === "In Progress"
+        })
+    }
+
+    const getHighPriorityTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.priority === 3
+        })
+    }
+
+    const getMediumPriorityTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.priority === 2
+        })
+    }
+
+    const getLowPriorityTasks = (taskList: Task[]) => {
+        return taskList.filter(task => {
+            return task.priority === 1
+        })
+    }
 
     return (
         <Box w="full">
@@ -102,7 +186,7 @@ const Dashboard = () => {
                         spacing="16px"
                         divider={
                             <Divider
-                                border="2px"
+                                border="1px"
                                 borderColor="blackAlpha.900"
                                 maxWidth="250px"
                             />
@@ -112,7 +196,9 @@ const Dashboard = () => {
                         </Heading>
 
                         <Stat>
-                            <StatNumber textAlign="center">10/15</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getWorkingEngineers(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -122,7 +208,9 @@ const Dashboard = () => {
                         </Stat>
 
                         <Stat>
-                            <StatNumber textAlign="center">10 Tasks</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getTasksCompletedToday(logList).length} Tasks
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -133,7 +221,7 @@ const Dashboard = () => {
 
                         <Stat>
                             <StatNumber textAlign="center">
-                                250 Tasks
+                                {getTasksCompletedWeek(logList).length} Tasks
                             </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
@@ -145,7 +233,7 @@ const Dashboard = () => {
 
                         <Stat>
                             <StatNumber textAlign="center">
-                                1000 Tasks
+                                {getTasksCompletedMonth(logList).length} Tasks
                             </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
@@ -168,7 +256,7 @@ const Dashboard = () => {
                         spacing="16px"
                         divider={
                             <Divider
-                                border="2px"
+                                border="1px"
                                 borderColor="blackAlpha.900"
                                 maxWidth="250px"
                             />
@@ -178,7 +266,9 @@ const Dashboard = () => {
                         </Heading>
 
                         <Stat>
-                            <StatNumber textAlign="center">2</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getOverdueTasks(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -188,7 +278,9 @@ const Dashboard = () => {
                         </Stat>
 
                         <Stat>
-                            <StatNumber textAlign="center">4</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getMaintenanceEquipments(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -230,7 +322,7 @@ const Dashboard = () => {
                         spacing="16px"
                         divider={
                             <Divider
-                                border="2px"
+                                border="1px"
                                 borderColor="blackAlpha.900"
                                 maxWidth="250px"
                             />
@@ -240,7 +332,9 @@ const Dashboard = () => {
                         </Heading>
 
                         <Stat>
-                            <StatNumber textAlign="center">23</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getInProgressTasks(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -250,7 +344,9 @@ const Dashboard = () => {
                         </Stat>
 
                         <Stat>
-                            <StatNumber textAlign="center">4</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getHighPriorityTasks(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -260,7 +356,9 @@ const Dashboard = () => {
                         </Stat>
 
                         <Stat>
-                            <StatNumber textAlign="center">15</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getMediumPriorityTasks(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
@@ -270,7 +368,9 @@ const Dashboard = () => {
                         </Stat>
 
                         <Stat>
-                            <StatNumber textAlign="center">25</StatNumber>
+                            <StatNumber textAlign="center">
+                                {getLowPriorityTasks(taskList).length}
+                            </StatNumber>
                             <StatHelpText
                                 fontSize="lg"
                                 textColor="black"
