@@ -24,9 +24,6 @@ type DataTableProps = {
 }
 
 const EquipmentTable = (props: DataTableProps) => {
-
-    
-
     return (
         <Container
             h="full"
@@ -57,14 +54,15 @@ const EquipmentTable = (props: DataTableProps) => {
                     <Table variant="simple" colorScheme="blackAlpha">
                         <Thead>
                             <Tr>
-                                {props.heading.map(heading => (
-                                    <Th>{heading}</Th>
+                                {props.heading.map((heading, index) => (
+                                    <Th key={index}>{heading}</Th>
                                 ))}
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {props.equipment.map(equipment => (
+                            {props.equipment.map((equipment, index) => (
                                 <Tr
+                                    key={index}
                                     onClick={() =>
                                         props.onSelect(equipment.id)
                                     }>
