@@ -11,6 +11,7 @@ interface NavbarItems {
 const pages: NavbarItems[] = [
     { name: "Dashboard", pageUrl: "/dashboard" },
     { name: "Equipment", pageUrl: "/equipment" },
+    { name: "All Logs", pageUrl: "/log" },
     { name: "Engineer", pageUrl: "/engineer" },
 ]
 
