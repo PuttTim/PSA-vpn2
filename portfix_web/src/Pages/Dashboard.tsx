@@ -3,6 +3,7 @@ import { getFirestore, collection, onSnapshot } from "firebase/firestore"
 import firebaseInstance from "../firebase"
 import { Task } from "../Interfaces/Task"
 import { Log } from "../Interfaces/Log"
+import { Engineer } from "../Interfaces/Engineer"
 import {
     Box,
     Heading,
@@ -18,10 +19,26 @@ import LogNotificationCard from "../Components/LogNotificationCard"
 
 const Dashboard = () => {
     const db = getFirestore(firebaseInstance)
+    const [engineerList, setEngineerList] = useState<Engineer[]>([])
     const [taskList, setTaskList] = useState<Task[]>([])
     const [logList, setLogList] = useState<Log[]>([])
 
     useEffect(() => {
+        const unsubscribeEngineer = onSnapshot(
+            collection(db, "engineer"),
+            querySnapshot => {
+                const tempEngineerList: Engineer[] = []
+                querySnapshot.forEach(doc => {
+                    tempEngineerList.push({
+                        ...(doc.data() as Engineer),
+                        id: doc.id,
+                    })
+                })
+
+                setEngineerList(tempEngineerList)
+            },
+        )
+
         const unsubscribeTask = onSnapshot(
             collection(db, "task"),
             querySnapshot => {
@@ -58,15 +75,17 @@ const Dashboard = () => {
         )
 
         return () => {
+            unsubscribeEngineer()
             unsubscribeTask()
             unsubscribeLog()
         }
     }, [])
 
     useEffect(() => {
+        console.log(engineerList)
         console.log(taskList)
         console.log(logList)
-    }, [taskList, logList])
+    }, [engineerList, taskList, logList])
 
     const getWorkingEngineers = (taskList: Task[]) => {
         const workingEngineers = [] as any[]
@@ -144,8 +163,20 @@ const Dashboard = () => {
         })
     }
 
+    const getMostRecentLogs = (logList: Log[]) => {
+        return logList.sort((a, b) => {
+            return b.timestamp.diff(a.timestamp).as("seconds")
+        })
+    }
+
+    const getEngineerById = (engineerId: string) => {
+        return engineerList.find(engineer => {
+            return engineer.id === engineerId
+        })
+    }
+
     return (
-        <HStack w="full" maxWidth="1500px" spacing="50px">
+        <HStack w="full" maxWidth="1500px" spacing="50px" alignItems="start">
             <Box w="full" maxWidth="1000px">
                 <Heading mb="32px">At a Glance</Heading>
                 <HStack maxWidth="1000px" spacing="25px">
@@ -423,22 +454,24 @@ const Dashboard = () => {
                     maxWidth="500px"
                     pb="20px"
                     overflow="hidden">
-                    <LogNotificationCard
-                        title="Routine Inspection"
-                        engineerName="Nasrullah"
-                        equipmentId="CR4"
-                        comment="Not working"
-                        type="Cancelled"
-                        timestamp={DateTime.now()}
-                    />
-                    <LogNotificationCard
-                        title="Routine Inspection"
-                        engineerName="Nasrullah"
-                        equipmentId="CR4"
-                        comment="Not working"
-                        type="Completed"
-                        timestamp={DateTime.now()}
-                    />
+                    {getMostRecentLogs(logList)
+                        .slice(0, 6)
+                        .map((log, i) => {
+                            return (
+                                <LogNotificationCard
+                                    key={i}
+                                    title={log.title}
+                                    type={log.type}
+                                    engineerName={
+                                        getEngineerById(log.engineerId)?.name ??
+                                        "Unknown"
+                                    }
+                                    equipmentId={log.equipmentId}
+                                    comment={log.comment}
+                                    timestamp={log.timestamp}
+                                />
+                            )
+                        })}
                 </VStack>
             </Box>
         </HStack>

@@ -102,7 +102,9 @@ const LogNotificationCard = (props: LogNotificationCardProps) => {
                                     Log Submitted On
                                 </Heading>
                                 <Text fontSize="lg">
-                                    {props.timestamp.toFormat("yyyy/MM/dd")}
+                                    {props.timestamp.toFormat(
+                                        "yyyy/MM/dd @ HH:mm:ss ZZZZ",
+                                    )}
                                 </Text>
                             </VStack>
                             <VStack alignItems="start" spacing="8px">
