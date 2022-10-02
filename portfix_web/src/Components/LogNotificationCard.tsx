@@ -12,13 +12,10 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    Button,
     Heading,
 } from "@chakra-ui/react"
 import { DateTime } from "luxon"
-import { IoCalendarClear, IoPerson, IoChevronForward } from "react-icons/io5"
-import React from "react"
-import { Log } from "../Interfaces/Log"
+import { IoCalendarClear, IoPerson } from "react-icons/io5"
 
 type LogNotificationCardProps = {
     title: string

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { getFirestore, collection, onSnapshot } from "firebase/firestore"
 import firebaseInstance from "../firebase"
-import { Equipment } from "../Interfaces/Equipment"
 import { Task } from "../Interfaces/Task"
 import { Log } from "../Interfaces/Log"
 import {
@@ -10,13 +9,8 @@ import {
     HStack,
     Stat,
     VStack,
-    StatLabel,
     StatNumber,
     StatHelpText,
-    StatArrow,
-    StatGroup,
-    StackDivider,
-    Center,
     Divider,
 } from "@chakra-ui/react"
 import { DateTime } from "luxon"
