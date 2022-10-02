@@ -26,7 +26,7 @@ class _TaskItemState extends State<TaskItem> {
 
     return ExpandableNotifier(
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+        padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

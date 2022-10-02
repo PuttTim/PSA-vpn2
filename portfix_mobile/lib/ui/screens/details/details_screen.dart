@@ -6,7 +6,7 @@ import 'package:portfix_mobile/data/logs/log_modal.dart';
 import 'package:portfix_mobile/data/tasks/task_model.dart';
 import 'package:portfix_mobile/ui/screens/details/widgets/card.dart';
 import 'package:portfix_mobile/ui/screens/details/widgets/google_map.dart';
-import 'package:portfix_mobile/ui/screens/logs/logs_screen.dart';
+import 'package:portfix_mobile/ui/screens/screens.dart';
 import 'package:portfix_mobile/ui/theme.dart';
 
 class DetailsScreen extends StatefulWidget {
