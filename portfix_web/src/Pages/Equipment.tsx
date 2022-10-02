@@ -25,16 +25,8 @@ const EquipmentPage = () => {
     const [equipmentId, setEquipmentId] = useState("0")
     const [equipmentList, setEquipmentList] = useState<Equipment[]>([])
 
-    const selectEquipment = (id: string) => {
-        if (id === equipmentId) {
-            setEquipmentId("0")
-        } else {
-            setEquipmentId(id)
-        }
-    }
-
     useEffect(() => {
-        const unsubscribe = onSnapshot(
+        const unsubscribeEquipment = onSnapshot(
             collection(db, "equipment"),
             querySnapshot => {
                 const tempEquipmentList: Equipment[] = []
@@ -50,8 +42,20 @@ const EquipmentPage = () => {
             },
         )
 
-        return () => unsubscribe()
+        return () => unsubscribeEquipment()
     }, [])
+    
+    const selectEquipment = (id: string) => {
+        if (id === equipmentId) {
+            setEquipmentId("0")
+        } else {
+            setEquipmentId(id)
+        }
+    }
+
+    const addEquipment = () => {
+        console.log("Add equipment")
+    }
 
     return (
         <Box w="full">
@@ -72,6 +76,7 @@ const EquipmentPage = () => {
                         ]}
                         equipment={equipmentList}
                         onSelect={selectEquipment}
+                        onAdd={addEquipment}
                     />
                 </GridItem>
                 <GridItem rowSpan={2} colSpan={1}>
