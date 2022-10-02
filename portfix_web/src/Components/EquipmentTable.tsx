@@ -1,5 +1,6 @@
 import {
     Box,
+    Center,
     Container,
     Heading,
     HStack,
@@ -24,15 +25,18 @@ import {
 import { useState } from "react"
 import { IoAdd, IoInformation } from "react-icons/io5"
 import { Equipment } from "../Interfaces/Equipment"
+import StatusLight from "./StatusLight"
 
-type DataTableProps = {
+type EquipmentTableProps = {
     heading: string[]
     equipment: Equipment[]
+    maintenanceEquipment: string[]
+    selectedEquipmentId: string
     onSelect: (id: string) => void
     onAdd: () => void
 }
 
-const EquipmentTable = (props: DataTableProps) => {
+const EquipmentTable = (props: EquipmentTableProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
@@ -40,7 +44,8 @@ const EquipmentTable = (props: DataTableProps) => {
             <Container
                 h="full"
                 maxH="100%"
-                maxW="full"
+                maxW="52vw"
+                minW="52vw"
                 overflowY="scroll"
                 outline="2.5px solid black"
                 borderRadius="xl">
@@ -78,8 +83,20 @@ const EquipmentTable = (props: DataTableProps) => {
                                         key={index}
                                         onClick={() =>
                                             props.onSelect(equipment.id)
-                                        }>
-                                        <Td>!!!</Td>
+                                        }
+                                        cursor="pointer"
+                                        bgColor={
+                                            equipment.id ===
+                                            props.selectedEquipmentId
+                                                ? "hsla(187, 71%, 61%, 15%)"
+                                                : "hsla(187, 71%, 61%, 0%)"
+                                        }
+                                        transition="background-color 0.2s ease-out">
+                                        <Td>
+                                            <Center>
+                                                <StatusLight color={props.maintenanceEquipment.includes(equipment.id) ? "redPulse" : "green"} />
+                                            </Center>
+                                        </Td>
                                         <Td>{equipment.id}</Td>
                                         <Td>{equipment.model}</Td>
                                         <Td>{equipment.location}</Td>
