@@ -17,7 +17,7 @@ import {
 import { DateTime } from "luxon"
 import LogNotificationCard from "../Components/LogNotificationCard"
 
-const Dashboard = () => {
+const DashboardPage = () => {
     const db = getFirestore(firebaseInstance)
     const [engineerList, setEngineerList] = useState<Engineer[]>([])
     const [taskList, setTaskList] = useState<Task[]>([])
@@ -478,4 +478,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default DashboardPage
