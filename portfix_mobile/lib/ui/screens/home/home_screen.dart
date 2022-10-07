@@ -56,46 +56,44 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.only(top: 20),
-        child: StreamBuilder<List<TaskModel>>(
-          stream: _repository.getTaskStreams(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingListView();
-            }
-            if (!snapshot.hasData || snapshot.data?.isEmpty == true) {
-              return const EmptyTasksWdget();
-            }
+      body: StreamBuilder<List<TaskModel>>(
+        stream: _repository.getTaskStreams(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingListView();
+          }
+          if (!snapshot.hasData || snapshot.data?.isEmpty == true) {
+            return const EmptyTasksWdget();
+          }
 
-            var inProgressList = snapshot.data!.where(isInProgress).toList()
-              ..sort(sortByTime);
+          var inProgressList = snapshot.data!.where(isInProgress).toList()
+            ..sort(sortByTime);
 
-            var notStarted = snapshot.data!.where(isNotStarted).toList()
-              ..sort(sortByTime);
+          var notStarted = snapshot.data!.where(isNotStarted).toList()
+            ..sort(sortByTime);
 
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  TaskListView(
-                    header: "In Progress",
-                    labelWhenEmpty:
-                        "There are no tasks in progress now. Try doing it now!",
-                    taskList: inProgressList,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TaskListView(
-                    header: "Not Started",
-                    labelWhenEmpty: "There are no other tasks available",
-                    taskList: notStarted,
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              children: [
+                TaskListView(
+                  header: "In Progress",
+                  labelWhenEmpty:
+                      "There are no tasks in progress now. Try doing it now!",
+                  taskList: inProgressList,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TaskListView(
+                  header: "Not Started",
+                  labelWhenEmpty: "There are no other tasks available",
+                  taskList: notStarted,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

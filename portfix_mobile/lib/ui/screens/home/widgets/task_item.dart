@@ -31,8 +31,10 @@ class _TaskItemState extends State<TaskItem> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                colors[widget.taskModel.priority]!.withAlpha(150),
-                colors[widget.taskModel.priority]!.withAlpha(255),
+                colors[isOverDue ? 3 : widget.taskModel.priority]!
+                    .withAlpha(150),
+                colors[isOverDue ? 3 : widget.taskModel.priority]!
+                    .withAlpha(255),
               ],
             ),
           ),
@@ -53,7 +55,12 @@ class _TaskItemState extends State<TaskItem> {
                     isOverDue
                         ? "${widget.taskModel.title}(OVERDUE)"
                         : widget.taskModel.title,
-                    style: const TextStyle(fontSize: 23),
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: isOverDue
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
                 collapsed: Row(
